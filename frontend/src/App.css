@@ -1,0 +1,16 @@
+.ql-editor {
+  border: 2px solid lightgray; /* Change editor border */
+  font-family: Arial, sans-serif; /* Change editor font */
+  min-height: 200px; /* Set minimum height */
+  font-size: 1.1rem;
+}
+
+.ql-toolbar .ql-formats { /* Style toolbar buttons */
+  margin: 5px;
+  padding: 8px 12px;
+  border-radius: 5px;
+}
+
+.ql-snow .ql-picker { /* Customize dropdown menus */
+  background-color: #f0f0f0;
+}

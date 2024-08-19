@@ -1,0 +1,25 @@
+.quill{
+    /* background-color: white; */
+    /* min-height: 4rem;
+    max-height: 10rem; */
+}
+
+.quill .ql-toolbar{
+    border: none;   
+    background: green;
+}
+
+ .ql-formats span {
+    color: white;    
+}
+.ql-snow .ql-stroke{
+    stroke: white;
+}
+.ql-snow .ql-stroke:hover{
+    stroke: red;
+
+}
+.quill .ql-container{
+    min-height: 15rem;
+    font-size: 1.2rem;
+}
