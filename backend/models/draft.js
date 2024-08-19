@@ -26,6 +26,7 @@ const draft = await mongoose.Schema(
     priority: {
       type: Number,
     },
+    deleted: Boolean
   },
   { timestamps: true }
 );

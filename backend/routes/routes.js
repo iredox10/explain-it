@@ -48,6 +48,16 @@ route.patch("/edit-post/:id", verifyAuthorOrAdmin, controller.edit_post);
 
 route.delete("/delete-post/:id", verifyAdmin, controller.delete_post);
 
-route.post('/add-draft/:id', verifyAuthorOrAdmin, controller.draft)
+route.post("/add-draft/:id",verifyAuthorOrAdmin,  controller.draft);
+
+route.get("/get-user-drafts/:id",  controller.get_user_drafts);
+
+route.get("/get-draft/:id",  controller.get_draft);
+
+route.post("/publish-draft/:id",  verifyAuthorOrAdmin,controller.publish_draft);
+
+route.patch('/update-draft/:id', verifyAuthorOrAdmin,controller.update_draft)
+
+route.delete("/delete-draft/:id",  verifyAuthorOrAdmin,controller.delete_draft);
 
 export default route;

@@ -306,19 +306,158 @@ export const draft = async (req, res) => {
   }
 };
 
-export const get_user_draft = async (req, res) => {
+export const get_user_drafts = async (req, res) => {
   try {
     const user = await User.findById(req.params.id);
     const author = await Author.findById(req.params.id);
 
     if (user) {
-      const userDrafts = await User.findById(user._id).populate("drafts");
+      const userDrafts = await User.findById(req.params.id).populate("drafts");
       return res.status(200).json(userDrafts);
     } else {
       const authorDrafts = await Author.findById(user._id).populate("drafts");
       return res.status(200).json(authorDrafts);
     }
   } catch (err) {
+    console.log(err.message);
     res.json(err.message);
+  }
+};
+
+export const get_draft = async (req, res) => {
+  try {
+    const draft = await Draft.findById(req.params.id);
+    res.status(200).json(draft);
+  } catch (err) {
+    res.status(404).json(err.message);
+  }
+};
+
+export const update_draft = async (req, res) => {
+  try {
+    const draft = await Draft.findByIdAndUpdate(req.params.id, req.body, {
+      new: true,
+    });
+    res.status(201).json(draft);
+  } catch (err) {
+    res.status(404).json(err.message);
+  }
+};
+
+// export const publish_draft = async (req, res) => {
+//   try {
+//     const draft = await Draft.findById(req.params.id);
+//     const user = await User.findById(req.params.id);
+//     const author = await Author.findById(req.params.id);
+//     const category = await Category.findById(req.params.category_id);
+
+//     if (draft) {
+//       if (!author) {
+//         const post = await Post({
+//           title: draft.title,
+//           subTitle: draft.subTitle,
+//           article: draft.article,
+//           author: user.username,
+//           priority,
+//           image,
+//           category: req.body.category,
+//         });
+//         post.save();
+//         category.posts.push(post);
+//         category.save();
+//         return res.json({ post, user, posts });
+//       } else {
+//         const post = await Post({
+//           title: draft.title,
+//           subTitle: draft.subTitle,
+//           article: draft.article,
+//           author: author.fullname,
+//           priority,
+//           image,
+//           category: req.body.category,
+//         });
+//         post.save();
+//         const category = await Category.findOne({ name: post.category });
+//         category.posts.push(post);
+//         category.save();
+//         author.posts.push(post);
+//         author.save();
+//         return res.json({ post, author, category });
+//       }
+//       category.drafts.pop(draft.id);
+//       await Draft.findByIdAndDelete(req.params.id);
+//       await category.save();
+//       res.status(201).json({ post, category, draft });
+//     }
+//   } catch (err) {
+//     res.status(404).json(err.message);
+//   }
+// };
+
+export const publish_draft = async (req, res) => {
+  try {
+    const draft = await Draft.findById(req.params.id);
+    const user = await User.findOne({ _id: draft.userId });
+    const author = await Author.findOne({ _id: draft.userId });
+    const category = await Category.findOne({ name: draft.category });
+    if (user) {
+      const post = await Post.create({
+        title: draft.title,
+        subTitle: draft.subTitle,
+        article: draft.article,
+        author: draft.author,
+        priority: draft.priority,
+        image: draft.image,
+        category: draft.category,
+      });
+      category.posts.push(post);
+      category.save();
+      user.drafts.pop(draft._id);
+      user.save();
+      await Draft.findByIdAndUpdate(req.params.id, {deleted:true},{new:true})
+      return res.json({ post, user });
+    } else {
+      const post = await Post.create({
+        title: draft.title,
+        subTitle: draft.subTitle,
+        article: draft.article,
+        author: draft.author,
+        priority: draft.priority,
+        image: draft.image,
+        category: draft.category,
+      });
+      category.posts.push(post);
+      category.save();
+      author.posts.push(post)
+      author.save()
+      author.drafts.pop(draft._id);
+      author.save();
+      await Draft.findByIdAndUpdate(req.params.id, {deleted:true},{new:true})
+      return res.json({ post, user });
+    }
+  } catch (err) {
+    res.json(err.message);
+  }
+};
+
+export const user_delete_draft = async (req,res) =>{
+  try {
+    const user = await User.findById(req.params.id).populate('drafts')
+    const draft = await Draft.findOne({_id: req.body.draftId})
+    user.drafts.pop(draft._id)
+    await Draft.findByIdAndUpdate(draft._id, {deleted: true},{new:true})
+    res.status(200).json({user,draft})
+  } catch (err) {
+    
+    res.status(404).json(err.message)
+  }
+}
+
+export const delete_draft = async (req, res) => {
+  try {
+    const draft = await Draft.findByIdAndDelete(req.params.id);
+    res.status(200).json(draft);
+  } catch (err) {
+    res.status(404).json(err.message);
   }
 };
