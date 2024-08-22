@@ -8,13 +8,24 @@ import FormBtn from "../../components/FormBtn";
 import Form from "../../components/Form";
 
 const Admin = () => {
-  return(
+  return (
     <div>
-      <NavLink to='/admin/categories'>Admin categories</NavLink>
-      <NavLink to='/admin/authors'>Authors</NavLink>
-      <NavLink to='/admin/drafts'>Drafts</NavLink>
+      <Header />
+      <div className="absolute top-[11rem] flex justify-center w-full gap-5  text-center">
+        <div className="bg-white p-8 capitalize">
+          <NavLink to="/admin/categories">Admin categories</NavLink>
+        </div>
+
+        <div className="bg-white p-8 capitalize">
+          <NavLink to="/admin/authors">Authors</NavLink>
+        </div>
+
+        <div className="bg-white p-8 capitalize">
+          <NavLink to="/admin/drafts">Drafts</NavLink>
+        </div>
+      </div>
     </div>
-  )
+  );
 };
 
 export default Admin;

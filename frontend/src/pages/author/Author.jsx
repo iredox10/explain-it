@@ -9,7 +9,8 @@ import FormBtn from "../../components/FormBtn";
 import axios from "axios";
 const Author = () => {
   const { id } = useParams();
-  const { data: author, loading, err } = useFetch(`${path}/get-author/${id}`);
+  const { data, loading, err } = useFetch(`${path}/get-author/${id}`);
+  console.log(data)
   const {
     data: categories,
     loading: load,
@@ -51,23 +52,25 @@ const Author = () => {
 
   return (
     <div>
-      {author && (
+      {data && (
         <div>
           <div>
             <p>
-              <span>fullname:</span> {author.author.fullname}
+              <span>fullname:</span> {data.author.fullname}
             </p>
             <p>
-              <span>username:</span> {author.author.username}
+              <span>username:</span> {data.author.username}
             </p>
           </div>
           <div>
             <h1>Posts</h1>
-            {/* {author.author.posts.length == 0
+            {data && data.posts.length == 0
               ? "no post"
-              : posts.map((post) => {
-                  <div></div>;
-                })} */}
+              : data.posts.map((post) => (
+                  <div>{post.title}
+                  {post.category} 
+                  </div>
+                ))}
           </div>
         </div>
       )}

@@ -37,8 +37,8 @@ export const get_users = async (req, res) => {
 };
 export const get_user = async (req, res) => {
   try {
-    const users = await User.findById(req.params.id);
-    res.status(200).json(users);
+    const user = await User.findById(req.params.id).populate('posts');
+    res.status(200).json({user, posts: user.posts});
   } catch (err) {
     res.status(404).json(err.message);
   }

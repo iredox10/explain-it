@@ -1,8 +1,9 @@
 .ql-editor {
-  border: 2px solid lightgray; /* Change editor border */
-  font-family: Arial, sans-serif; /* Change editor font */
+  border: 2px solid lightgray; 
+  font-family: Arial, sans-serif; 
   min-height: 200px; /* Set minimum height */
   font-size: 1.1rem;
+
 }
 
 .ql-toolbar .ql-formats { /* Style toolbar buttons */

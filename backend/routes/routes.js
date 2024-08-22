@@ -1,12 +1,15 @@
 import express from "express";
+import multer from 'multer'
 import {
   verifyToken,
   verifyAdmin,
   verifyAuthorOrAdmin,
 } from "../utils/verifyToken.js";
 import * as controller from "../controllers/controllers.js";
-
+import {storage} from '../config/cloudinary.js'
 const route = express.Router();
+
+const upload = multer({storage:storage})
 
 // user route
 
@@ -37,6 +40,7 @@ route.delete("/delete-category/:id", verifyAdmin, controller.delete_category);
 route.post(
   "/post-article/:id/:category_id",
   verifyAuthorOrAdmin,
+  upload.array('images'),
   controller.post
 );
 

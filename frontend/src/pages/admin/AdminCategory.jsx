@@ -49,14 +49,14 @@ const AdminCategory = () => {
                         <span>view</span>
                       </p>
                     </Link>
-                    <button type="button">
+                    <Link to={`/edit-post/${post._id}`}>
                       <p className="text-center flex flex-col text-primary-color">
                         <div className="flex w-full justify-center">
                           <FaEdit className="" />
                         </div>
                         <span>edit</span>
                       </p>
-                    </button>
+                    </Link>
 
                     <button>
                       <p className="text-center flex flex-col text-red-600 ">

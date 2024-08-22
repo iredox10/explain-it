@@ -1,61 +1,80 @@
+
 import { useParams } from "react-router-dom";
 import ReactQuill from "react-quill";
 import axios from "axios";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { quillFormats, quillModules } from "../utils/constants";
 import Header from "../components/Header";
 import "./quill.css";
 import useFetch from "../hooks/useFetch";
 import { path } from "../utils/path";
 import { useUserStore } from "../utils/store";
-import NsHeader from "../components/NsHeader";
 
-const CreatePost = () => {
+const EditPost = () => {
   const { id } = useParams();
   const [title, setTitle] = useState("");
   const [subTitle, setSubTitle] = useState("");
   const [article, setArticle] = useState("");
   const [priority, setPriority] = useState("");
+  const [draftId, setDraftId] = useState('')
   const [error, setError] = useState("");
+  const [category, setCategory] = useState('')
+
+  const fetchPost = async () => {
+    try {
+      const res = await axios(`${path}/get-post/${id}`);
+      setTimeout(() => {
+        setTitle(res.data.title);
+        setArticle(res.data.article);
+        setPriority(res.data.priority);
+        setSubTitle(res.data.subTitle);
+        setDraftId(res.data._id)
+        setCategory(res.data.category)
+      }, 100);
+    } catch (err) {
+        setError(err.response.data)
+        console.log(err)
+    }
+  };
+
+  useEffect(() => {
+    const fetch = async () => {
+      await fetchPost();
+    };
+    fetch();
+  }, []);
 
   const modules = quillModules;
   const formats = quillFormats;
 
   const token = JSON.parse(localStorage.getItem("jwtToken"));
   const user = JSON.parse(localStorage.getItem("user"));
+  
 
-  const {
-    data: category,
-    err,
-    loading,
-  } = useFetch(`${path}/get-category/${id}`);
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (!title || !subTitle || !article) {
       setError("all fields can't be empty");
     }
     try {
-      const res = await axios.post(
-        `${path}/post-article/${user._id}/${id}`,
-        {
-          title,
-          subTitle,
-          article,
-          priority,
-          category: category.name,
-        },
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
+      const res = await axios.patch(`${path}/edit-post/${id}`, {
+        title,
+        subTitle,
+        article,
+        priority,
+        // category: category.name,
+      },{
+        headers:{
+            Authorization: `Bearer ${token}`
         }
-      );
+      });
       console.log(res.data);
     } catch (err) {
       console.log(err);
     }
   };
 
+  // TODO: Implement drafting of post after editing a post
   const handleDraft = async () => {
     if (!title || !subTitle || !article) {
       setError("all fields can't be empty");
@@ -63,13 +82,13 @@ const CreatePost = () => {
       return;
     }
     try {
-      const res = await axios.post(
-        `${path}/add-draft/${user._id}`,
+      const res = await axios.patch(
+        `${path}/update-draft/${draftId}`,
         {
           title,
           subTitle,
           article,
-          category: category.name,
+          category,
           priority,
         },
         {
@@ -86,26 +105,19 @@ const CreatePost = () => {
 
   return (
     <div>
-      <NsHeader headerText={`Create New Post`} />
-      <div className="absolute w-4/6 drop-shadow-2xl top-[9rem] left-[4rem] py-4 bg-secondary-color">
+      <Header />
+      <div className="absolute top-[5rem] bg-secondary-color">
         <form onSubmit={handleSubmit}>
           {error && error}
-          <div className="flex justify-end">
-            <input
-              type="file"
-              name="coverImage"
-              id="coverImage"
-              className="border-2 border-green-500 "
-              placeholder="add cover image"
-            />
-          </div>
+          <input type="file" name="coverImage" id="coverImage" />
           <div className="flex flex-col">
             <textarea
               type="text"
               name="title"
               placeholder="Post Title"
-              className="p-10 text-4xl capitalize font-bold text-wrap bg-secondary-color outline-none"
+              className="p-10 text-4xl capitalize font-bold text-wrap"
               onChange={(e) => setTitle(e.target.value)}
+              value={title}
             ></textarea>
             <div className="flex w-full">
               <textarea
@@ -113,16 +125,18 @@ const CreatePost = () => {
                 name="subtitle"
                 id="subtitle"
                 placeholder="subtitle"
-                className="w-full px-10 font-bold text-2xl max-h-16 bg-secondary-color"
+                className="w-full px-10 font-bold text-2xl max-h-16"
                 onChange={(e) => setSubTitle(e.target.value)}
+                value={subTitle}
               ></textarea>
               <input
                 type="number"
                 name="priority"
                 id="priority"
                 placeholder="priority"
-                className="w-full px-10 font-bold text-2xl bg-secondary-color"
+                className="w-full px-10 font-bold text-2xl"
                 onChange={(e) => setPriority(e.target.value)}
+                value={priority}
               />
             </div>
           </div>
@@ -133,18 +147,14 @@ const CreatePost = () => {
               modules={modules}
               formats={formats}
               placeholder="Post here..."
+              defaultValue={article}
             />
           </div>
-          <div className="flex justify-end gap-4 p-4 ">
-            <button type="submit" className="capitalize bg-primary-color font-bold text-white px-9 py-2">publish</button>
-            <button type="button" className="capitalize text-primary-color font-bold" onClick={handleDraft} >
-              draft
-            </button>
-          </div>
+          <button type="submit">edit</button>
         </form>
       </div>
     </div>
   );
 };
 
-export default CreatePost;
+export default EditPost;

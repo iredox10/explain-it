@@ -21,7 +21,6 @@ const post = await mongoose.Schema(
     priority: {
       type: Number,
     },
-    drafts: [{ type: mongoose.Types.ObjectId, ref: "draft" }],
   },
   { timestamps: true }
 );

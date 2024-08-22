@@ -28,6 +28,7 @@ const author = await mongoose.Schema(
         type: mongoose.Types.ObjectId,
       },
     ],
+    drafts: [{ type: mongoose.Types.ObjectId, ref: "draft" }],
     image: String,
     links: [String],
     facebook: String,

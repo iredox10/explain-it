@@ -1,12 +1,34 @@
-.quill{
-    /* background-color: white; */
-    /* min-height: 4rem;
-    max-height: 10rem; */
+:root{
+    --opacity: 0.5
+}
+
+.ql-container{
+    height: 300px;
+    overflow-y: auto;
+    border: none;
+}
+
+.ql-container.ql-snow{
+    border:none;
+    /* width:100% ; */
+}
+
+.ql-picker-label{
+    color: black;
+}
+
+.ql-snow .ql-picker.ql-expanded .ql-picker-options{
+    background-color: green;
 }
 
 .quill .ql-toolbar{
     border: none;   
     background: green;
+    padding: 1rem;
+}
+
+.ql-snow .ql-editor img{
+    width: 100px;
 }
 
  .ql-formats span {
