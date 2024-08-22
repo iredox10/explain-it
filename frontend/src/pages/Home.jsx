@@ -22,10 +22,21 @@ const Home = () => {
                 ) : (
                   post.title
                 )}
-                {post.category == 'fashion' ? <div className="bg-yellow">fashion site</div> : post.article}
-                {post.category == 'computer science' ? <div className="bg-red-600">
-                  <Link to={`/post/${post._id}`}>{post.title}</Link>
-                </div> : post.article}
+                {post.category == "fashion" ? (
+                  <div className="bg-yellow">
+                    <h1>Fashion Design</h1>
+                    {post.title}
+                  </div>
+                ) : (
+                  post.article
+                )}
+                {post.category == "computer science" ? (
+                  <div className="bg-red-600">
+                    <Link to={`/post/${post._id}`}>{post.title}</Link>
+                  </div>
+                ) : (
+                  post.article
+                )}
               </div>
             ))}
         </div>

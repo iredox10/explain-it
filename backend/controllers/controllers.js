@@ -5,6 +5,8 @@ import bcrypt from "bcryptjs";
 import Post from "../models/post.js";
 import Category from "../models/category.js";
 import Draft from "../models/draft.js";
+import { cloudinaryConfig } from "../config/cloudinary.js";
+import cloudinary from "cloudinary";
 
 const signJwt = async ({ user }) => {
   const token = await jwt.sign(
@@ -37,8 +39,8 @@ export const get_users = async (req, res) => {
 };
 export const get_user = async (req, res) => {
   try {
-    const user = await User.findById(req.params.id).populate('posts');
-    res.status(200).json({user, posts: user.posts});
+    const user = await User.findById(req.params.id).populate("posts");
+    res.status(200).json({ user, posts: user.posts });
   } catch (err) {
     res.status(404).json(err.message);
   }
@@ -183,7 +185,8 @@ export const get_categories = async (req, res) => {
 };
 
 export const post = async (req, res) => {
-  const { title, subTitle, article, author, image, priority } = req.body;
+  const { title, subTitle, article, author, images, coverImage, priority } =
+    req.body;
   try {
     const user = await User.findById(req.params.id);
     const author = await Author.findById(req.params.id);
@@ -197,9 +200,24 @@ export const post = async (req, res) => {
         article,
         author: user.username,
         priority,
-        image,
+        images,
         category: req.body.category,
       });
+      const uploadedImages = [];
+      for (const img of images) {
+        if (img.startsWith("data:image/")) {
+          const uploadResponse = await cloudinary.uploader.upload(img, {
+            resource_type: "auto",
+          });
+          uploadedImages.push(uploadResponse.secure_url);
+        }
+      }
+      const coverImageRes = await cloudinary.uploader.upload(coverImage, {
+        resource_type: "auto",
+      });
+
+      post.coverImage = coverImageRes.secure_url;
+      post.images = uploadedImages;
       post.save();
       category.posts.push(post);
       category.save();
@@ -247,10 +265,27 @@ export const get_post = async (req, res) => {
 };
 
 export const edit_post = async (req, res) => {
+  const { coverImage, images } = req.body;
   try {
+    const uploadedImages = [];
+    for (const img of images) {
+      if (img.startsWith("data:image/")) {
+        const uploadResponse = await cloudinary.uploader.upload(img, {
+          resource_type: "auto",
+        });
+        uploadedImages.push(uploadResponse.secure_url);
+      }
+    }
+    const coverImage = await cloudinary.uploader.upload(coverImage, {
+      resource_type: "auto",
+    });
     const post = await Post.findByIdAndUpdate(req.params.id, req.body, {
       new: true,
     });
+
+    post.coverImage = coverImage.secure_url;
+    post.images = uploadedImages;
+    post.save();
     res.status(200).json(post);
   } catch (err) {
     res.status(403).json(err.message);
@@ -414,7 +449,11 @@ export const publish_draft = async (req, res) => {
       category.save();
       user.drafts.pop(draft._id);
       user.save();
-      await Draft.findByIdAndUpdate(req.params.id, {deleted:true},{new:true})
+      await Draft.findByIdAndUpdate(
+        req.params.id,
+        { deleted: true },
+        { new: true }
+      );
       return res.json({ post, user });
     } else {
       const post = await Post.create({
@@ -428,11 +467,15 @@ export const publish_draft = async (req, res) => {
       });
       category.posts.push(post);
       category.save();
-      author.posts.push(post)
-      author.save()
+      author.posts.push(post);
+      author.save();
       author.drafts.pop(draft._id);
       author.save();
-      await Draft.findByIdAndUpdate(req.params.id, {deleted:true},{new:true})
+      await Draft.findByIdAndUpdate(
+        req.params.id,
+        { deleted: true },
+        { new: true }
+      );
       return res.json({ post, user });
     }
   } catch (err) {
@@ -440,18 +483,17 @@ export const publish_draft = async (req, res) => {
   }
 };
 
-export const user_delete_draft = async (req,res) =>{
+export const user_delete_draft = async (req, res) => {
   try {
-    const user = await User.findById(req.params.id).populate('drafts')
-    const draft = await Draft.findOne({_id: req.body.draftId})
-    user.drafts.pop(draft._id)
-    await Draft.findByIdAndUpdate(draft._id, {deleted: true},{new:true})
-    res.status(200).json({user,draft})
+    const user = await User.findById(req.params.id).populate("drafts");
+    const draft = await Draft.findOne({ _id: req.body.draftId });
+    user.drafts.pop(draft._id);
+    await Draft.findByIdAndUpdate(draft._id, { deleted: true }, { new: true });
+    res.status(200).json({ user, draft });
   } catch (err) {
-    
-    res.status(404).json(err.message)
+    res.status(404).json(err.message);
   }
-}
+};
 
 export const delete_draft = async (req, res) => {
   try {

@@ -2,6 +2,7 @@ import mongoose, { mongo } from "mongoose";
 
 const post = await mongoose.Schema(
   {
+    coverImage: String,
     title: {
       type: String,
       required: true,
@@ -17,7 +18,10 @@ const post = await mongoose.Schema(
     },
     category: String,
     author: [String],
-    image: String,
+    images: {
+      type: [String],
+      default: [],
+    },
     priority: {
       type: Number,
     },

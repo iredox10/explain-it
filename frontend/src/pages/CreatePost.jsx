@@ -12,11 +12,15 @@ import NsHeader from "../components/NsHeader";
 
 const CreatePost = () => {
   const { id } = useParams();
+  const [coverImage, setCoverImage] = useState(null);
+  const [previewImage, setpreviewImage] = useState("");
   const [title, setTitle] = useState("");
   const [subTitle, setSubTitle] = useState("");
   const [article, setArticle] = useState("");
   const [priority, setPriority] = useState("");
   const [error, setError] = useState("");
+  const [quillHtml, setQuillHtml] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
 
   const modules = quillModules;
   const formats = quillFormats;
@@ -29,11 +33,41 @@ const CreatePost = () => {
     err,
     loading,
   } = useFetch(`${path}/get-category/${id}`);
+
+  const handleChange = (html) => {
+    setQuillHtml(html);
+  };
+
+  const handleCoverImageChange = (e) => {
+    setCoverImage(e.target.files[0]);
+
+    const reader = new FileReader();
+    reader.onload = (e) => {
+      setpreviewImage(e.target.result);
+    };
+    reader.readAsDataURL(e.target.files[0]);
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setIsLoading(true)
+    const imagesUrls = [];
     if (!title || !subTitle || !article) {
       setError("all fields can't be empty");
+      return;
     }
+    if (!coverImage) {
+      setError("No cover Imaage");
+      return;
+    }
+
+    const quill = document.querySelector(".ql-editor");
+    const images = quill.querySelectorAll("img");
+
+    images.forEach((image) => {
+      imagesUrls.push(image.src);
+    });
+
     try {
       const res = await axios.post(
         `${path}/post-article/${user._id}/${id}`,
@@ -43,6 +77,8 @@ const CreatePost = () => {
           article,
           priority,
           category: category.name,
+          images: imagesUrls,
+          coverImage: previewImage,
         },
         {
           headers: {
@@ -50,7 +86,10 @@ const CreatePost = () => {
           },
         }
       );
-      console.log(res.data);
+      if (res) {
+        setIsLoading(false);
+        console.log(res);
+      }
     } catch (err) {
       console.log(err);
     }
@@ -97,7 +136,11 @@ const CreatePost = () => {
               id="coverImage"
               className="border-2 border-green-500 "
               placeholder="add cover image"
+              onChange={(e) => handleCoverImageChange(e)}
             />
+            {coverImage && (
+              <img src={previewImage} style={{ width: "200px" }} />
+            )}
           </div>
           <div className="flex flex-col">
             <textarea
@@ -136,8 +179,18 @@ const CreatePost = () => {
             />
           </div>
           <div className="flex justify-end gap-4 p-4 ">
-            <button type="submit" className="capitalize bg-primary-color font-bold text-white px-9 py-2">publish</button>
-            <button type="button" className="capitalize text-primary-color font-bold" onClick={handleDraft} >
+            <button
+              type="submit"
+              className={isLoading ?'bg-primary-color/50' :"capitalize bg-primary-color font-bold text-white px-9 py-2"}
+              disabled={isLoading}
+            >
+              publish
+            </button>
+            <button
+              type="button"
+              className={"capitalize text-primary-color font-bold"}
+              onClick={handleDraft}
+            >
               draft
             </button>
           </div>

@@ -1,4 +1,3 @@
-
 import { useParams } from "react-router-dom";
 import ReactQuill from "react-quill";
 import axios from "axios";
@@ -12,15 +11,29 @@ import { useUserStore } from "../utils/store";
 
 const EditPost = () => {
   const { id } = useParams();
+  const [coverImage, setCoverImage] = useState(null);
+  const [previewImage, setPreviewImage] = useState("");
   const [title, setTitle] = useState("");
   const [subTitle, setSubTitle] = useState("");
   const [article, setArticle] = useState("");
   const [priority, setPriority] = useState("");
-  const [draftId, setDraftId] = useState('')
+  const [draftId, setDraftId] = useState("");
   const [error, setError] = useState("");
-  const [category, setCategory] = useState('')
+  const [category, setCategory] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
+
+  const handleCoverImageChange = (e) => {
+    setCoverImage(e.target.files[0]);
+
+    const reader = new FileReader();
+    reader.onload = (e) => {
+      setPreviewImage(e.target.result);
+    };
+    reader.readAsDataURL(e.target.files[0]);
+  };
 
   const fetchPost = async () => {
+    setIsLoading(true);
     try {
       const res = await axios(`${path}/get-post/${id}`);
       setTimeout(() => {
@@ -28,12 +41,16 @@ const EditPost = () => {
         setArticle(res.data.article);
         setPriority(res.data.priority);
         setSubTitle(res.data.subTitle);
-        setDraftId(res.data._id)
-        setCategory(res.data.category)
+        setDraftId(res.data._id);
+        setCategory(res.data.category);
+        setCoverImage(res.data.coverImage);
       }, 100);
+      if (article) {
+        setIsLoading(false);
+      }
     } catch (err) {
-        setError(err.response.data)
-        console.log(err)
+      setError(err.response.data);
+      console.log(err);
     }
   };
 
@@ -49,7 +66,6 @@ const EditPost = () => {
 
   const token = JSON.parse(localStorage.getItem("jwtToken"));
   const user = JSON.parse(localStorage.getItem("user"));
-  
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -57,17 +73,22 @@ const EditPost = () => {
       setError("all fields can't be empty");
     }
     try {
-      const res = await axios.patch(`${path}/edit-post/${id}`, {
-        title,
-        subTitle,
-        article,
-        priority,
-        // category: category.name,
-      },{
-        headers:{
-            Authorization: `Bearer ${token}`
+      const res = await axios.patch(
+        `${path}/edit-post/${id}`,
+        {
+          title,
+          subTitle,
+          article,
+          priority,
+          // category: category.name,
+          coverImage: previewImage,
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
         }
-      });
+      );
       console.log(res.data);
     } catch (err) {
       console.log(err);
@@ -107,9 +128,17 @@ const EditPost = () => {
     <div>
       <Header />
       <div className="absolute top-[5rem] bg-secondary-color">
+        {coverImage && <img src={coverImage} alt="" />}
+        {previewImage && <img src={previewImage} />}
         <form onSubmit={handleSubmit}>
           {error && error}
-          <input type="file" name="coverImage" id="coverImage" />
+          <input
+            type="file"
+            name="coverImage"
+            id="coverImage"
+            onChange={(e) => handleCoverImageChange(e)}
+          />
+
           <div className="flex flex-col">
             <textarea
               type="text"

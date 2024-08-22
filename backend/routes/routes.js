@@ -40,7 +40,6 @@ route.delete("/delete-category/:id", verifyAdmin, controller.delete_category);
 route.post(
   "/post-article/:id/:category_id",
   verifyAuthorOrAdmin,
-  upload.array('images'),
   controller.post
 );
 
