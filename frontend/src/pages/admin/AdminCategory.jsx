@@ -16,14 +16,6 @@ const AdminCategory = () => {
   } = useFetch(`${path}/get-category/${id}`);
   console.log(category);
 
-  // const wrapperRef = useCallback((wrapper) => {
-  //   if (wrapper == null) return;
-  //   wrapper.innerHtml = "";
-  //   const editor = document.createElement("div");
-  //   wrapper.append(editor);
-  //   new Quill(editor, { theme: "snow" });
-  // }, []);
-
   return (
     <div>
       <Header />

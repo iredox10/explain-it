@@ -221,7 +221,7 @@ export const post = async (req, res) => {
       post.save();
       category.posts.push(post);
       category.save();
-      return res.json({ post, user, posts });
+      return res.json({ post, user, posts }).status(201);
     } else {
       const post = await Post({
         title,
@@ -238,18 +238,47 @@ export const post = async (req, res) => {
       category.save();
       author.posts.push(post);
       author.save();
-      return res.json({ post, author, category });
+      return res.json({ post, author, category }).status(201);
     }
   } catch (err) {
     console.log(err.stack);
-    res.json(err.message);
+    res.json(err.message).status(400);
   }
 };
 
 export const get_posts = async (req, res) => {
   try {
-    const posts = await Post.find();
-    res.status(200).json(posts);
+    // const posts = await Post.find();
+    const categories = await Category.aggregate([
+      {
+        $group: {
+          _id: "$priority",
+        },
+      },
+    ]);
+    const categoriesWithPosts = await Category.aggregate([
+      {
+        $lookup: {
+          from: "posts",
+          localField: "name",
+          foreignField: "category", // Assuming the "category" field in the "post" model references the category
+          as: "posts",
+        },
+      },
+      {
+        $sort: { priority: 1 }, // Sort by priority in ascending order
+      },
+      {
+        $project: {
+          name: 1,
+          about: 1,
+          posts: 1,
+          priority: 1,
+        },
+      },
+    ]);
+    res.status(200).json(categoriesWithPosts);
+    // res.status(200).json(posts);
   } catch (err) {
     res.status(404).json(err.message);
   }
@@ -276,19 +305,19 @@ export const edit_post = async (req, res) => {
         uploadedImages.push(uploadResponse.secure_url);
       }
     }
-    const coverImage = await cloudinary.uploader.upload(coverImage, {
+    const coverImageRes = await cloudinary.uploader.upload(coverImage, {
       resource_type: "auto",
     });
     const post = await Post.findByIdAndUpdate(req.params.id, req.body, {
       new: true,
     });
 
-    post.coverImage = coverImage.secure_url;
+    post.coverImage = coverImageRes.secure_url;
     post.images = uploadedImages;
     post.save();
     res.status(200).json(post);
   } catch (err) {
-    res.status(403).json(err.message);
+    res.status(403).json(err);
   }
 };
 

@@ -8,6 +8,7 @@ import "./quill.css";
 import useFetch from "../hooks/useFetch";
 import { path } from "../utils/path";
 import { useUserStore } from "../utils/store";
+import NsHeader from "../components/NsHeader";
 
 const EditPost = () => {
   const { id } = useParams();
@@ -72,6 +73,12 @@ const EditPost = () => {
     if (!title || !subTitle || !article) {
       setError("all fields can't be empty");
     }
+    const imagesUrls = [];
+    const quill = document.querySelector(".ql-editor");
+    const images = quill.querySelectorAll("img");
+    images.forEach((image) => {
+      imagesUrls.push(image.src);
+    });
     try {
       const res = await axios.patch(
         `${path}/edit-post/${id}`,
@@ -80,6 +87,7 @@ const EditPost = () => {
           subTitle,
           article,
           priority,
+          images: imagesUrls,
           // category: category.name,
           coverImage: previewImage,
         },
@@ -126,10 +134,13 @@ const EditPost = () => {
 
   return (
     <div>
-      <Header />
-      <div className="absolute top-[5rem] bg-secondary-color">
-        {coverImage && <img src={coverImage} alt="" />}
-        {previewImage && <img src={previewImage} />}
+      <NsHeader headerText={"Edit Post"} />
+
+      <div className="absolute w-4/6 drop-shadow-2xl top-[9rem] left-[4rem] py-4 bg-secondary-color">
+        <div className="w-1/4">
+          {coverImage && <img src={coverImage} alt="" className="w-full" />}
+          {previewImage && <img src={previewImage} className="w-full" />}
+        </div>
         <form onSubmit={handleSubmit}>
           {error && error}
           <input

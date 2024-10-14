@@ -1,4 +1,4 @@
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import ReactQuill from "react-quill";
 import axios from "axios";
 import { useState } from "react";
@@ -47,10 +47,9 @@ const CreatePost = () => {
     };
     reader.readAsDataURL(e.target.files[0]);
   };
-
+  const navigate = useNavigate()
   const handleSubmit = async (e) => {
     e.preventDefault();
-    setIsLoading(true)
     const imagesUrls = [];
     if (!title || !subTitle || !article) {
       setError("all fields can't be empty");
@@ -69,6 +68,7 @@ const CreatePost = () => {
     });
 
     try {
+      setIsLoading(true);
       const res = await axios.post(
         `${path}/post-article/${user._id}/${id}`,
         {
@@ -86,9 +86,10 @@ const CreatePost = () => {
           },
         }
       );
-      if (res) {
+      console.log(res);
+      if (res.status == 201) {
         setIsLoading(false);
-        console.log(res);
+        navigate(-1)
       }
     } catch (err) {
       console.log(err);
@@ -181,10 +182,14 @@ const CreatePost = () => {
           <div className="flex justify-end gap-4 p-4 ">
             <button
               type="submit"
-              className={isLoading ?'bg-primary-color/50' :"capitalize bg-primary-color font-bold text-white px-9 py-2"}
+              className={
+                isLoading
+                  ? " capitalize bg-primary-color font-bold text-white px-9 py-2"
+                  : "capitalize bg-primary-color font-bold text-white px-9 py-2"
+              }
               disabled={isLoading}
             >
-              publish
+              {isLoading ? "Publishing" : "Publish"}
             </button>
             <button
               type="button"

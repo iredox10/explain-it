@@ -7,6 +7,7 @@ import FormInput from "../../components/FormInput";
 import FormTextArea from "../../components/FormTextArea";
 import FormBtn from "../../components/FormBtn";
 import axios from "axios";
+import Header from "../../components/Header";
 const Author = () => {
   const { id } = useParams();
   const { data, loading, err } = useFetch(`${path}/get-author/${id}`);
@@ -52,6 +53,7 @@ const Author = () => {
 
   return (
     <div>
+      <Header />
       {data && (
         <div>
           <div>
