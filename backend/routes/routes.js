@@ -40,7 +40,7 @@ route.delete("/delete-category/:id", verifyAdmin, controller.delete_category);
 route.post(
   "/post-article/:id/:category_id",
   verifyAuthorOrAdmin,
-  controller.post
+  controller.create_post
 );
 
 route.get("/get-posts", controller.get_posts);
@@ -49,7 +49,7 @@ route.get("/get-post/:id", controller.get_post);
 
 route.patch("/edit-post/:id", verifyAuthorOrAdmin, controller.edit_post);
 
-route.delete("/delete-post/:id", verifyAdmin, controller.delete_post);
+route.delete("/delete-post/:id/:categoryId", verifyAdmin, controller.delete_post);
 
 route.post("/add-draft/:id",verifyAuthorOrAdmin,  controller.draft);
 

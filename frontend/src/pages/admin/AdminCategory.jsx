@@ -7,19 +7,61 @@ import { useUserStore } from "../../utils/store";
 import "react-quill/dist/quill.snow.css";
 import Header from "../../components/Header";
 import { FaEdit, FaEye, FaPlus, FaTrashAlt } from "react-icons/fa";
+
 const AdminCategory = () => {
+  const [category, setCategory] = useState();
+  const [model, setModel] = useState(false);
   const { id } = useParams();
-  const {
-    data: category,
-    loading,
-    err,
-  } = useFetch(`${path}/get-category/${id}`);
-  console.log(category);
+
+  const fetchCategory = async () => {
+    try {
+      const res = await axios(`${path}/get-category/${id}`);
+      setCategory(res.data);
+      console.log(res.data);
+    } catch (err) {
+      console.log(err);
+    }
+  };
+
+  useEffect(() => {
+    fetchCategory();
+  }, []);
+
+  const handleShowModel = async (id) => {
+    try {
+      const res = await axios(`http://localhost:4004/get-post/${id}`);
+      if (res.status == 200) {
+        setModel(true);
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const handleDelete = async (id) => {
+    const token = JSON.parse(localStorage.getItem("jwtToken"));
+    try {
+      const res = await axios.delete(
+        `${path}/delete-post/${id}/${category._id}`,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+      if (res.status == 200) {
+        await fetchCategory();
+        console.log(res);
+        setModel(false)
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };
 
   return (
     <div>
       <Header />
-      
       <div className="absolute w-full top-[9rem] grid grid-cols-5 gap-5 text-center p-2 md:p-5">
         {category
           ? category.posts.map((post) => (
@@ -50,7 +92,7 @@ const AdminCategory = () => {
                       </p>
                     </Link>
 
-                    <button>
+                    <button onClick={() => handleShowModel(post._id)}>
                       <p className="text-center flex flex-col text-red-600 ">
                         <div className="flex w-full justify-center">
                           <FaTrashAlt className="" />
@@ -70,6 +112,21 @@ const AdminCategory = () => {
       >
         <FaPlus />
       </Link>
+      {model && (
+        <div className="absolute left-[50%] translate-x-[-50%] w-full bg-secondary-color/60 top-0 bottom-0 ">
+          <div className="flex place-content-center my-[7rem]   ">
+            <div className=" border-2 border-primary-color">
+              <h1 className="bg-primary-color p-5 capitalize text-white">
+                are you sure you want to delete
+              </h1>
+              <div className="flex justify-between p-9">
+                <button onClick={() => setModel(false)}>No</button>
+                <button onClick={() => handleDelete(category._id)}>Yes</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 };

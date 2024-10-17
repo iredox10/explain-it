@@ -16,6 +16,7 @@ import Post from "./pages/Post";
 import DraftedPost from "./pages/DraftedPost";
 import EditPost from "./pages/EditPost";
 import AdminPost from "./pages/admin/AdminPost";
+import AddPost from "./pages/author/AddPost";
 
 function App() {
   const user = useUserStore((state) => state.user);
@@ -49,6 +50,8 @@ function App() {
           <Route path="/create-post/:id" element={<CreatePost />} />
           <Route path="/edit-post/:id" element={<EditPost />} />
           <Route path="/drafted-post/:id" element={<DraftedPost />} />
+
+          <Route path="/author-add-post/:id" element={<AddPost />} />
 
           <Route path="*" element={<p>page not found</p>} />
         </Routes>

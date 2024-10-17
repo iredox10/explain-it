@@ -15,13 +15,12 @@ const Home = () => {
         <div>
           <h1>corruption</h1>
         </div>
-        <div className={`grid grid-cols-12 gap-5`}>
+        <div className={`md:grid grid-cols-12 gap-5 text-center`}>
           {data &&
             data.map((category) => (
-              // <div key={post._id} className={`col-span-${post.priority} border-2`}>
               <div
                 key={category._id}
-                className={`col-span-4  ${
+                className={`col-span-4   $
                   category.priority >= 12
                     ? "col-span-full row-span-full "
                     : "col-span-4"
@@ -37,7 +36,15 @@ const Home = () => {
                           post.priority > 4 ? "w-full bg-blue-500" : ""
                         }`}
                       >
-                        <Link to={`/post/${post._id}`}> {post.title}</Link>
+                        <Link to={`/post/${post._id}`}>
+                          <div className="">
+                            <img src={post.coverImage} alt="" />
+                          </div>
+                          <h1 className="text-2xl capitalize font-bold">
+                            {post.title}
+                          </h1>
+                          <p className="text-sm">{post.subTitle}</p>
+                        </Link>
                       </div>
                     ))
                   : null}

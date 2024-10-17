@@ -1,20 +1,22 @@
+
 import { useNavigate, useParams } from "react-router-dom";
 import ReactQuill from "react-quill";
 import axios from "axios";
 import { useState } from "react";
-import { quillFormats, quillModules } from "../utils/constants";
-import Header from "../components/Header";
-import "./quill.css";
-import useFetch from "../hooks/useFetch";
-import { path } from "../utils/path";
-import { useUserStore } from "../utils/store";
-import NsHeader from "../components/NsHeader";
+import Header from "../../components/Header";
+import ".././quill.css";
+import useFetch from "../../hooks/useFetch";
+import { path } from "../../utils/path";
+import { useUserStore } from "../../utils/store";
+import NsHeader from "../../components/NsHeader";
+import { quillFormats, quillModules } from "../../utils/constants";
 
 const CreatePost = () => {
   const { id } = useParams();
   const [coverImage, setCoverImage] = useState(null);
   const [previewImage, setpreviewImage] = useState("");
   const [title, setTitle] = useState("");
+  const [category, setCategory] = useState();
   const [subTitle, setSubTitle] = useState("");
   const [article, setArticle] = useState("");
   const [priority, setPriority] = useState("");
@@ -29,34 +31,25 @@ const CreatePost = () => {
   const user = JSON.parse(localStorage.getItem("user"));
 
   const {
-    data: category,
-    err,
-    loading,
-  } = useFetch(`${path}/get-category/${id}`);
-
+    data: categories,
+    loading: load,
+    err : catErr
+  } = useFetch(`${path}/get-categories`);
+  console.log(categories);
   const handleChange = (html) => {
     setQuillHtml(html);
   };
 
   const handleCoverImageChange = (e) => {
-    const file = e.target.files[0];
-    const fileFormats = ["image/png", "image/jpeg", 'image/WebP'];
-    if (!fileFormats.includes(file.type)) {
-      setError("image format not supported");
-      setpreviewImage('')
-      return;
-    } else {
-      setError("");
-      setCoverImage(file);
-      const reader = new FileReader();
-      reader.onload = (e) => {
-        setpreviewImage(e.target.result);
-        setCoverImage(file)
-      };
-      reader.readAsDataURL(file);
-    }
+    setCoverImage(e.target.files[0]);
+
+    const reader = new FileReader();
+    reader.onload = (e) => {
+      setpreviewImage(e.target.result);
+    };
+    reader.readAsDataURL(e.target.files[0]);
   };
-  const navigate = useNavigate();
+  const navigate = useNavigate()
   const handleSubmit = async (e) => {
     e.preventDefault();
     const imagesUrls = [];
@@ -85,7 +78,7 @@ const CreatePost = () => {
           subTitle,
           article,
           priority,
-          category: category.name,
+          category,
           images: imagesUrls,
           coverImage: previewImage,
         },
@@ -98,7 +91,7 @@ const CreatePost = () => {
       console.log(res);
       if (res.status == 201) {
         setIsLoading(false);
-        navigate(-1);
+        navigate(-1)
       }
     } catch (err) {
       console.log(err);
@@ -118,7 +111,7 @@ const CreatePost = () => {
           title,
           subTitle,
           article,
-          category: category.name,
+          category ,
           priority,
         },
         {
@@ -177,6 +170,20 @@ const CreatePost = () => {
                 className="w-full px-10 font-bold text-2xl bg-secondary-color"
                 onChange={(e) => setPriority(e.target.value)}
               />
+              {category}
+              <select onChange={e => setCategory(e.target.value)} name="" id="">
+                <option value="">Select Category</option>
+                {isLoading? (
+                  <option value="">Loading...</option>
+                ) : (
+                  categories &&
+                  categories.map((cat) => (
+                    <option key={cat._id} value={cat._id}>
+                      {cat.name}
+                    </option>
+                  ))
+                )}
+              </select>
             </div>
           </div>
           <div>
@@ -192,8 +199,8 @@ const CreatePost = () => {
             <button
               type="submit"
               className={
-                isLoading || error
-                  ? " capitalize bg-primary-color/30 font-bold text-white px-9 py-2"
+                isLoading
+                  ? " capitalize bg-primary-color font-bold text-white px-9 py-2"
                   : "capitalize bg-primary-color font-bold text-white px-9 py-2"
               }
               disabled={isLoading}
