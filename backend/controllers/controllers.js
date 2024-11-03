@@ -298,7 +298,6 @@ export const edit_post = async (req, res) => {
   try {
     let coverImageRes;
     let uploadedImages;
-    if (coverImage || images) {
       uploadedImages = [];
       for (const img of images) {
         if (img.startsWith("data:image/")) {
@@ -308,6 +307,7 @@ export const edit_post = async (req, res) => {
           uploadedImages.push(uploadResponse.secure_url);
         }
       }
+    if (coverImage) {
       coverImageRes = await cloudinary.uploader.upload(coverImage, {
         resource_type: "auto",
       });
@@ -322,7 +322,7 @@ export const edit_post = async (req, res) => {
     post.save();
     res.status(201).json(post);
   } catch (err) {
-    res.status(403).json(err.message);
+    res.status(403).json(err.stack);
   }
 };
 
