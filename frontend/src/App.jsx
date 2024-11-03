@@ -17,6 +17,7 @@ import DraftedPost from "./pages/DraftedPost";
 import EditPost from "./pages/EditPost";
 import AdminPost from "./pages/admin/AdminPost";
 import AddPost from "./pages/author/AddPost";
+import NotFoud from "./pages/NotFoud";
 
 function App() {
   const user = useUserStore((state) => state.user);
@@ -53,7 +54,7 @@ function App() {
 
           <Route path="/author-add-post/:id" element={<AddPost />} />
 
-          <Route path="*" element={<p>page not found</p>} />
+          <Route path="*" element={<NotFoud />} />
         </Routes>
       </Router>
     </div>

@@ -1,4 +1,4 @@
-import { useParams } from "react-router-dom";
+import { Navigate, useNavigate, useParams } from "react-router-dom";
 import ReactQuill from "react-quill";
 import axios from "axios";
 import { useEffect, useState } from "react";
@@ -24,14 +24,33 @@ const EditPost = () => {
   const [isLoading, setIsLoading] = useState(false);
 
   const handleCoverImageChange = (e) => {
-    setCoverImage(e.target.files[0]);
-
-    const reader = new FileReader();
-    reader.onload = (e) => {
-      setPreviewImage(e.target.result);
-    };
-    reader.readAsDataURL(e.target.files[0]);
+    const file = e.target.files[0];
+    const fileFormats = ["image/png", "image/jpeg", "image/WebP"];
+    if (!fileFormats.includes(file.type)) {
+      setError("format not supported");
+      setPreviewImage("");
+      return;
+    } else {
+      setError("");
+      setCoverImage(file);
+      const reader = new FileReader();
+      reader.onload = (e) => {
+        setPreviewImage(e.target.result);
+        setCoverImage(file);
+        // console.log(coverImage);
+      };
+      reader.readAsDataURL(file);
+    }
   };
+  // const handleCoverImageChange = (e) => {
+  //   setCoverImage(e.target.files[0]);
+
+  //   const reader = new FileReader();
+  //   reader.onload = (e) => {
+  //     setPreviewImage(e.target.result);
+  //   };
+  //   reader.readAsDataURL(e.target.files[0]);
+  // };
 
   const fetchPost = async () => {
     setIsLoading(true);
@@ -45,6 +64,7 @@ const EditPost = () => {
         setDraftId(res.data._id);
         setCategory(res.data.category);
         setCoverImage(res.data.coverImage);
+        console.log(coverImage);
       }, 100);
       if (article) {
         setIsLoading(false);
@@ -67,7 +87,10 @@ const EditPost = () => {
 
   const token = JSON.parse(localStorage.getItem("jwtToken"));
   const user = JSON.parse(localStorage.getItem("user"));
+  const navigate = useNavigate();
 
+  // ! for now you have to change image when editing before sending 
+  // ! to server. Fix this issue.
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (!title || !subTitle || !article) {
@@ -79,6 +102,7 @@ const EditPost = () => {
     images.forEach((image) => {
       imagesUrls.push(image.src);
     });
+    setIsLoading(true);
     try {
       const res = await axios.patch(
         `${path}/edit-post/${id}`,
@@ -97,6 +121,10 @@ const EditPost = () => {
           },
         }
       );
+      if (res.status == 201) {
+        setIsLoading(false);
+        navigate(-1);
+      }
       console.log(res.data);
     } catch (err) {
       console.log(err);

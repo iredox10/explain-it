@@ -11,6 +11,7 @@ import { FaEdit, FaEye, FaPlus, FaTrashAlt } from "react-icons/fa";
 const AdminCategory = () => {
   const [category, setCategory] = useState();
   const [model, setModel] = useState(false);
+  const [post, setPost] = useState()
   const { id } = useParams();
 
   const fetchCategory = async () => {
@@ -32,17 +33,19 @@ const AdminCategory = () => {
       const res = await axios(`http://localhost:4004/get-post/${id}`);
       if (res.status == 200) {
         setModel(true);
+        setPost(res.data)
+        console.log(post)
       }
     } catch (error) {
       console.log(error);
     }
   };
 
-  const handleDelete = async (id) => {
+  const handleDelete = async (postId) => {
     const token = JSON.parse(localStorage.getItem("jwtToken"));
     try {
       const res = await axios.delete(
-        `${path}/delete-post/${id}/${category._id}`,
+        `${path}/delete-post/${post._id}/${category._id}`,
         {
           headers: {
             Authorization: `Bearer ${token}`,
@@ -65,10 +68,9 @@ const AdminCategory = () => {
       <div className="absolute w-full top-[9rem] grid grid-cols-5 gap-5 text-center p-2 md:p-5">
         {category
           ? category.posts.map((post) => (
-              <div>
+              <div key={post._id}>
                 <div
                   className="bg-secondary-color drop-shadow-2xl px-4 pt-10 pb-7 capitalize"
-                  key={post._id}
                 >
                   <p className="font-bold my-8 ">{post.title}</p>
                   <div className="text-center flex w-full justify-center gap-5">
@@ -117,7 +119,7 @@ const AdminCategory = () => {
           <div className="flex place-content-center my-[7rem]   ">
             <div className=" border-2 border-primary-color">
               <h1 className="bg-primary-color p-5 capitalize text-white">
-                are you sure you want to delete
+                are you sure you want to delete {post.title}
               </h1>
               <div className="flex justify-between p-9">
                 <button onClick={() => setModel(false)}>No</button>

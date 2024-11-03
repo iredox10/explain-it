@@ -296,28 +296,33 @@ export const get_post = async (req, res) => {
 export const edit_post = async (req, res) => {
   const { coverImage, images } = req.body;
   try {
-    const uploadedImages = [];
-    for (const img of images) {
-      if (img.startsWith("data:image/")) {
-        const uploadResponse = await cloudinary.uploader.upload(img, {
-          resource_type: "auto",
-        });
-        uploadedImages.push(uploadResponse.secure_url);
+    let coverImageRes;
+    let uploadedImages;
+    if (coverImage || images) {
+      uploadedImages = [];
+      for (const img of images) {
+        if (img.startsWith("data:image/")) {
+          const uploadResponse = await cloudinary.uploader.upload(img, {
+            resource_type: "auto",
+          });
+          uploadedImages.push(uploadResponse.secure_url);
+        }
       }
+      coverImageRes = await cloudinary.uploader.upload(coverImage, {
+        resource_type: "auto",
+      });
     }
-    const coverImageRes = await cloudinary.uploader.upload(coverImage, {
-      resource_type: "auto",
-    });
     const post = await Post.findByIdAndUpdate(req.params.id, req.body, {
       new: true,
     });
-
-    post.coverImage = coverImageRes.secure_url;
-    post.images = uploadedImages;
+    if (coverImageRes) {
+      post.coverImage = coverImageRes.secure_url;
+      post.images = uploadedImages;
+    }
     post.save();
-    res.status(200).json(post);
+    res.status(201).json(post);
   } catch (err) {
-    res.status(403).json(err);
+    res.status(403).json(err.message);
   }
 };
 
@@ -332,15 +337,15 @@ export const edit_post = async (req, res) => {
 
 export const delete_post = async (req, res) => {
   try {
-    // const post = await Post.findByIdAndDelete(req.params.id);
-    const category = await Category.updateOne(
-      {
-        name: req.params.categoryId,
-      },
-      { $pull: { posts: req.params.id } }
+    const post = await Post.findByIdAndDelete(req.params.id);
+    const category = await Category.findByIdAndUpdate(
+      req.params.categoryId,
+      { $pull: { post: req.params.id } },
+      { new: true }
     );
-    // c.posts.pop(req.params.id)
-    res.status(200).json({category});
+    // ! the thing is that I am not using the right id, I am using the category Id.
+    // ! God, this thing took me morethan 8 hours.
+    res.status(200).json({ id: req.params.id});
   } catch (err) {
     res.status(404).json(err.message);
   }
