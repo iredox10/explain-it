@@ -9,6 +9,7 @@ import FormBtn from "../../components/FormBtn";
 import axios from "axios";
 import Header from "../../components/Header";
 import { FaPlus } from "react-icons/fa";
+
 const Author = () => {
   const { id } = useParams();
   const { data: author, loading, err } = useFetch(`${path}/get-author/${id}`);

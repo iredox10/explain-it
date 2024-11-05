@@ -9,16 +9,13 @@ const draft = await mongoose.Schema(
     },
     title: {
       type: String,
-      required: true,
       unique: true,
     },
     subTitle: {
       type: String,
-      required: true,
     },
     article: {
       type: String,
-      required: true,
     },
     category: String, 
     author: [String],

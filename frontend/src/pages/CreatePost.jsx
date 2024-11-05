@@ -40,10 +40,10 @@ const CreatePost = () => {
 
   const handleCoverImageChange = (e) => {
     const file = e.target.files[0];
-    const fileFormats = ["image/png", "image/jpeg", 'image/WebP'];
+    const fileFormats = ["image/png", "image/jpeg", "image/WebP"];
     if (!fileFormats.includes(file.type)) {
       setError("image format not supported");
-      setpreviewImage('')
+      setpreviewImage("");
       return;
     } else {
       setError("");
@@ -51,7 +51,7 @@ const CreatePost = () => {
       const reader = new FileReader();
       reader.onload = (e) => {
         setpreviewImage(e.target.result);
-        setCoverImage(file)
+        setCoverImage(file);
       };
       reader.readAsDataURL(file);
     }
@@ -106,7 +106,7 @@ const CreatePost = () => {
   };
 
   const handleDraft = async () => {
-    if (!title || !subTitle || !article) {
+    if (!title && !subTitle && !article) {
       setError("all fields can't be empty");
       console.log(user._id);
       return;
@@ -127,7 +127,10 @@ const CreatePost = () => {
           },
         }
       );
-      console.log(res.data);
+      if (res.status == 201) {
+        console.log(res.data);
+        navigate(-1)
+      }
     } catch (err) {
       console.log(err);
     }

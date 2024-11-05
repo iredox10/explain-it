@@ -43,6 +43,7 @@ function App() {
           <Route path="/admin/categories" element={<AdminCategories />} />
           <Route path="/admin/post/:id" element={<AdminPost />} />
           <Route path="/admin/authors" element={<Authors />} />
+          <Route path="/admin/author/:id" element={<Author />} />
           <Route path="/admin/drafts" element={<AdminDrafts />} />
 
           <Route path="/author/:id" element={<Author />} />

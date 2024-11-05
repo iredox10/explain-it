@@ -35,7 +35,7 @@ const CreatePost = () => {
     loading: load,
     err : catErr
   } = useFetch(`${path}/get-categories`);
-  console.log(categories);
+
   const handleChange = (html) => {
     setQuillHtml(html);
   };
@@ -55,6 +55,7 @@ const CreatePost = () => {
     const imagesUrls = [];
     if (!title || !subTitle || !article) {
       setError("all fields can't be empty");
+      setIsLoading(false)
       return;
     }
     if (!coverImage) {
@@ -92,9 +93,12 @@ const CreatePost = () => {
       if (res.status == 201) {
         setIsLoading(false);
         navigate(-1)
+      }else{
+        setIsLoading(false)
       }
     } catch (err) {
       console.log(err);
+      setIsLoading(false)
     }
   };
 
@@ -170,7 +174,6 @@ const CreatePost = () => {
                 className="w-full px-10 font-bold text-2xl bg-secondary-color"
                 onChange={(e) => setPriority(e.target.value)}
               />
-              {category}
               <select onChange={e => setCategory(e.target.value)} name="" id="">
                 <option value="">Select Category</option>
                 {isLoading? (
@@ -178,7 +181,7 @@ const CreatePost = () => {
                 ) : (
                   categories &&
                   categories.map((cat) => (
-                    <option key={cat._id} value={cat._id}>
+                    <option key={cat._id} value={cat.name}>
                       {cat.name}
                     </option>
                   ))

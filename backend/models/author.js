@@ -34,7 +34,11 @@ const author = await mongoose.Schema(
     facebook: String,
     twitter: String,
     whatsapp: String,
-    password: String
+    password: String,
+    active: {
+      type: Boolean,
+      default: true
+    }
   },
   { timestamps: true }
 );

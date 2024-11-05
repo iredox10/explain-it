@@ -48,8 +48,14 @@ export const get_user = async (req, res) => {
 
 export const get_authors = async (req, res) => {
   try {
-    const author = await Author.find();
-    res.status(200).json(author);
+    const authors = await Author.find();
+    const activeAuthors = [];
+    authors.forEach((author) => {
+      if (author.active) {
+        activeAuthors.push(author);
+      }
+    });
+    res.status(200).json({ authors, activeAuthors });
   } catch (err) {
     res.status(404).json(err.message);
   }
@@ -63,6 +69,16 @@ export const get_author = async (req, res) => {
     res.status(404).json(err.message);
   }
 };
+
+export const edit_author = async (req, res) => {
+  try {
+    const author = await Author.findByIdAndUpdate(req.params.id, req.body);
+    res.status(201).json(author);
+  } catch (err) {
+    res.status(400).json(err.message);
+  }
+};
+
 export const register_user = async (req, res) => {
   const { username, admin, password } = req.body;
   try {
@@ -134,6 +150,19 @@ export const add_user = async (req, res) => {
   } catch (err) {
     console.log(err.stack);
     res.status(403).json(err.message);
+  }
+};
+
+export const deactivate_author = async (req, res) => {
+  try {
+    const author = await Author.findByIdAndUpdate(
+      req.params.id,
+      { active: false },
+      { new: true }
+    );
+    res.status(200).json(author);
+  } catch (err) {
+    res.status(400).json(err.message);
   }
 };
 
@@ -241,7 +270,7 @@ export const create_post = async (req, res) => {
       return res.status(201).json({ post, author, category });
     }
   } catch (err) {
-    console.log(err.stack);
+    // console.log(err.stack);
     res.json(err.message).status(400);
   }
 };
@@ -298,15 +327,15 @@ export const edit_post = async (req, res) => {
   try {
     let coverImageRes;
     let uploadedImages;
-      uploadedImages = [];
-      for (const img of images) {
-        if (img.startsWith("data:image/")) {
-          const uploadResponse = await cloudinary.uploader.upload(img, {
-            resource_type: "auto",
-          });
-          uploadedImages.push(uploadResponse.secure_url);
-        }
+    uploadedImages = [];
+    for (const img of images) {
+      if (img.startsWith("data:image/")) {
+        const uploadResponse = await cloudinary.uploader.upload(img, {
+          resource_type: "auto",
+        });
+        uploadedImages.push(uploadResponse.secure_url);
       }
+    }
     if (coverImage) {
       coverImageRes = await cloudinary.uploader.upload(coverImage, {
         resource_type: "auto",
@@ -345,7 +374,7 @@ export const delete_post = async (req, res) => {
     );
     // ! the thing is that I am not using the right id, I am using the category Id.
     // ! God, this thing took me morethan 8 hours.
-    res.status(200).json({ id: req.params.id});
+    res.status(200).json({ id: req.params.id });
   } catch (err) {
     res.status(404).json(err.message);
   }
@@ -355,7 +384,15 @@ export const draft = async (req, res) => {
   try {
     const user = await User.findById(req.params.id);
     const author = await Author.findById(req.params.id);
-
+    const draft = await Draft.findOne({ title: req.body.title });
+    if (draft) {
+      const updatedDraft = await Draft.findOneAndUpdate(
+        { title: req.body.title },
+        req.body,
+        { new: true }
+      );
+      return res.status(201).json(updatedDraft);
+    }
     if (!user && !author) return res.status(404).json("user not found");
 
     if (user) {
@@ -387,6 +424,9 @@ export const draft = async (req, res) => {
       return res.status(201).json({ draft, author });
     }
   } catch (err) {
+    if (err.code == 11000) {
+      return res.status(404).json("article already exist");
+    }
     res.status(400).json(err.message);
   }
 };

@@ -21,6 +21,10 @@ route.get("/get-authors", controller.get_authors);
 
 route.get("/get-author/:id", controller.get_author);
 
+route.patch("/edit-author/:id", controller.edit_author);
+
+route.delete("/deactivate-author/:id", controller.deactivate_author);
+
 route.post("/register-user", controller.register_user);
 
 route.post("/add-author", verifyAdmin, controller.add_user);
