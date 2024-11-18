@@ -42,9 +42,15 @@ route.get("/get-category/:id", controller.get_category);
 route.delete("/delete-category/:id", verifyAdmin, controller.delete_category);
 
 route.post(
-  "/post-article/:id/:category_id",
+  "/post-article/:id/:category_id?",
   verifyAuthorOrAdmin,
   controller.create_post
+);
+
+route.post(
+  "/author-post-article/:authorId/",
+  verifyAuthorOrAdmin,
+  controller.author_create_post
 );
 
 route.get("/get-posts", controller.get_posts);

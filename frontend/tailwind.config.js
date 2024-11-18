@@ -6,6 +6,12 @@ export default {
   ],
   theme: {
     extend: {
+      fontFamily:{
+        'play-fair': ['play fair'],
+        'rubik': ['rubik'],
+        'satisfy': ['satisfy'],
+        'salsa': ['salsa']
+      },
       colors:{
         'primary-color': '#04991C',
         'secondary-color': '#E2FFDD',

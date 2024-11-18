@@ -29,7 +29,7 @@ function App() {
     // useUserStore.setState({ user: user });
   }, []);
   return (
-    <div className="bg-secondary-color min-h-[100vw]">
+    <div className="bg-secondary-color  font-rubik">
       <Router>
         <Routes>
           <Route path="/" element={<Home />} />

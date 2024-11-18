@@ -275,9 +275,48 @@ export const create_post = async (req, res) => {
   }
 };
 
+export const author_create_post = async (req, res) => {
+  const { title, subTitle, article, author, images, coverImage, priority } =
+    req.body;
+  try {
+    const uploadedImages = [];
+    for (const img of images) {
+      if (img.startsWith("data:image/")) {
+        const uploadResponse = await cloudinary.uploader.upload(img, {
+          resource_type: "auto",
+        });
+        uploadedImages.push(uploadResponse.secure_url);
+      }
+    }
+    const coverImageRes = await cloudinary.uploader.upload(coverImage, {
+      resource_type: "auto",
+    });
+    const author = await Author.findById(req.params.authorId);
+    const post = await Post({
+      title,
+      subTitle,
+      article,
+      author: author.fullname,
+      priority,
+      images,
+      category: req.body.category,
+    });
+    post.coverImage = coverImageRes.secure_url;
+    post.images = uploadedImages;
+    post.save();
+    const category = await Category.findOne({ name: post.category });
+    category.posts.push(post);
+    category.save();
+    author.posts.push(post);
+    author.save();
+    return res.status(201).json({ post, author, category });
+  } catch (err) {
+    res.status(400).json(err.stack);
+  }
+};
+
 export const get_posts = async (req, res) => {
   try {
-    // const posts = await Post.find();
     const categories = await Category.aggregate([
       {
         $group: {
@@ -307,7 +346,6 @@ export const get_posts = async (req, res) => {
       },
     ]);
     res.status(200).json(categoriesWithPosts);
-    // res.status(200).json(posts);
   } catch (err) {
     res.status(404).json(err.message);
   }
@@ -372,8 +410,6 @@ export const delete_post = async (req, res) => {
       { $pull: { post: req.params.id } },
       { new: true }
     );
-    // ! the thing is that I am not using the right id, I am using the category Id.
-    // ! God, this thing took me morethan 8 hours.
     res.status(200).json({ id: req.params.id });
   } catch (err) {
     res.status(404).json(err.message);

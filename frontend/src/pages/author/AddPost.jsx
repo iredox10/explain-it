@@ -73,7 +73,7 @@ const CreatePost = () => {
     try {
       setIsLoading(true);
       const res = await axios.post(
-        `${path}/post-article/${user._id}/${id}`,
+        `${path}/author-post-article/${id}`,
         {
           title,
           subTitle,
@@ -174,7 +174,7 @@ const CreatePost = () => {
                 className="w-full px-10 font-bold text-2xl bg-secondary-color"
                 onChange={(e) => setPriority(e.target.value)}
               />
-              <select onChange={e => setCategory(e.target.value)} name="" id="">
+              <select value={category} onChange={e => setCategory(e.target.value)} name="" id="">
                 <option value="">Select Category</option>
                 {isLoading? (
                   <option value="">Loading...</option>

@@ -25,6 +25,10 @@ const post = await mongoose.Schema(
     priority: {
       type: Number,
     },
+    heading:{
+      type: Boolean,
+      default: false
+    }
   },
   { timestamps: true }
 );
