@@ -40,7 +40,7 @@ const CreatePost = () => {
 
   const handleCoverImageChange = (e) => {
     const file = e.target.files[0];
-    const fileFormats = ["image/png", "image/jpeg", "image/WebP"];
+    const fileFormats = ["image/png", "image/jpeg", "image/webp"];
     if (!fileFormats.includes(file.type)) {
       setError("image format not supported");
       setpreviewImage("");

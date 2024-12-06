@@ -1,7 +1,7 @@
 import React from "react";
 import { Link } from "react-router-dom";
 
-const Header = () => {
+const Header = ({searchOnChange}) => {
   return (
     <div className="relative bg-primary-color p-2 md:p-5 min-h-[12rem]  w-full ">
       <div className="flex justify-between ">
@@ -19,6 +19,7 @@ const Header = () => {
           id="search"
           className="px-6 py-2"
           placeholder="Search..."
+          onChange={searchOnChange}
         />
       </div>
     </div>

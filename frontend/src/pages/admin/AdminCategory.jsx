@@ -12,6 +12,7 @@ const AdminCategory = () => {
   const [category, setCategory] = useState();
   const [model, setModel] = useState(false);
   const [post, setPost] = useState()
+  const [search, setSearch] = useState()
   const { id } = useParams();
 
   const fetchCategory = async () => {
@@ -23,7 +24,7 @@ const AdminCategory = () => {
       console.log(err);
     }
   };
-
+  // console.log(category.posts.map(post => post.title))
   useEffect(() => {
     fetchCategory();
   }, []);
@@ -64,7 +65,7 @@ const AdminCategory = () => {
 
   return (
     <div>
-      <Header />
+      <Header searchOnChange={(e) => setSearch(e.target.value)}/>
       <div className="absolute w-full top-[9rem] grid grid-cols-5 gap-5 text-center p-2 md:p-5">
         {category
           ? category.posts.map((post) => (

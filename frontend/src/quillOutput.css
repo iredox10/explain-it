@@ -1,0 +1,20 @@
+a{
+    /* color: green; */
+    text-decoration: solid underline;
+    transition: .3s ease;
+}
+
+a:hover{
+    background: green;
+    color: white;
+}
+
+p{
+    margin: 0;
+    padding: 0;
+}
+
+h2{
+    font-size: 1.8rem;
+    color: rgb(2, 36, 2);
+}

@@ -18,6 +18,7 @@ import EditPost from "./pages/EditPost";
 import AdminPost from "./pages/admin/AdminPost";
 import AddPost from "./pages/author/AddPost";
 import NotFoud from "./pages/NotFoud";
+import BigPost from "./pages/BigPost";
 
 function App() {
   const user = useUserStore((state) => state.user);
@@ -48,6 +49,7 @@ function App() {
 
           <Route path="/author/:id" element={<Author />} />
 
+          <Route path="/big-post/:id" element={<BigPost />} />
           <Route path="/post/:id" element={<Post />} />
           <Route path="/create-post/:id" element={<CreatePost />} />
           <Route path="/edit-post/:id" element={<EditPost />} />

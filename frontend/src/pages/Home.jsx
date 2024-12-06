@@ -9,15 +9,12 @@ const Home = () => {
   console.log(data);
 
   return (
-    <div className="p-5">
-      <h1>Welcome to Home Page</h1>
-      <div>
-        <div>
-          <h1>corruption</h1>
-        </div>
+    <div className="">
+      <div className="bg-primary-color p-10">
+        <h1 className='font-saira text-2xl text-white'>Welcome to Home Page</h1>
       </div>
-      <div className="grid grid-cols-12 ">
-        <div className="col-span-3 bg-red-500 p-2">
+      <div className="grid grid-cols-12 p-20  ">
+        <div className="col-span-3">
           {data &&
             data.map((category) => {
               if (category.priority > 4) {
@@ -25,16 +22,25 @@ const Home = () => {
                   <div>
                     {category.posts.length > 0
                       ? category.posts.map((post) => (
-                          <div className="my-2">
-                            <p>{post.category}</p>
-                            <div>
-                              <p>{post.title}</p>
-                              <div
-                                dangerouslySetInnerHTML={{
-                                  __html: post.article.slice(0, 100),
-                                }}
-                              ></div>
-                            </div>
+                          <div className="capitalize mb-9 border-2 border-primary-color p-2 ">
+                            <Link to={`/post/${post._id}`}>
+                              <p className="font-medium">{post.category}</p>
+                              <div>
+                                <p className="font-play-fair  font-bold text-xl">
+                                  {post.title}
+                                </p>
+                                <div
+                                  dangerouslySetInnerHTML={{
+                                    __html: post.article.slice(0, 100),
+                                  }}
+                                  className="my-2"
+                                ></div>
+                                <p>
+                                  <span className="font-bold">By </span>
+                                  {post.author[0]}
+                                </p>
+                              </div>
+                            </Link>
                           </div>
                         ))
                       : null}
@@ -56,29 +62,31 @@ const Home = () => {
                             if (post.priority == 1) {
                               return (
                                 <div id={post._Id} className="px-20">
-                                  <div className="w-full h-[15rem]">
-                                    <img
-                                      src={post.coverImage}
-                                      alt=""
-                                      className="w-full object-cover h-full"
-                                    />
-                                  </div>
-                                  <div className="text-center my-4 px-12">
-                                    <p className="font-play-fair capitalize">
-                                      {" "}
-                                      <span className="">by:</span>
-                                      {post.author[0]}
-                                    </p>
-                                    <p className=" font-play-fair text-5xl capitalize">
-                                      {post.title}
-                                    </p>
-                                    <div
-                                      className="font-rubik"
-                                      dangerouslySetInnerHTML={{
-                                        __html: post.article.slice(0, 200),
-                                      }}
-                                    ></div>
-                                  </div>
+                                  <Link to={`/big-post/${post._id}`}>
+                                    <div className="w-full h-[15rem]">
+                                      <img
+                                        src={post.coverImage}
+                                        alt=""
+                                        className="w-full object-cover h-full"
+                                      />
+                                    </div>
+                                    <div className="text-center my-4 px-12">
+                                      <p className="font-play-fair capitalize">
+                                        {" "}
+                                        <span className="">by:</span>
+                                        {post.author[0]}
+                                      </p>
+                                      <p className=" font-play-fair text-5xl capitalize">
+                                        {post.title}
+                                      </p>
+                                      <div
+                                        className="font-rubik"
+                                        dangerouslySetInnerHTML={{
+                                          __html: post.article.slice(0, 200),
+                                        }}
+                                      ></div>
+                                    </div>
+                                  </Link>
                                 </div>
                               );
                             }
@@ -108,8 +116,11 @@ const Home = () => {
                           </p>
                         </div>
                         {category.posts.map((post) => (
-                          <div className="flex justify-between my-4 gap-36 border-2">
-                            <Link to={`/post/${post._id}`}>
+                          <div className="flex justify-between my-4 gap-36 border-2 border-primary-color p-5">
+                            <Link
+                              to={`/post/${post._id}`}
+                              className="flex  justify-between"
+                            >
                               <div>
                                 <p>{post.title}</p>
                                 <div
@@ -118,13 +129,14 @@ const Home = () => {
                                   }}
                                 ></div>
                               </div>
-                              <div className="w-20">
-                              <img
-                                src={post.coverImage}
-                                alt={post.title + "cover image"}
-                                className="w-full"
-                              />
-                            </div></Link>
+                              <div className="w-[30%]">
+                                <img
+                                  src={post.coverImage}
+                                  alt={post.title + "cover image"}
+                                  className="w-full"
+                                />
+                              </div>
+                            </Link>
                           </div>
                         ))}
                       </div>

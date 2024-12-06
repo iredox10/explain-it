@@ -10,7 +10,8 @@ export default {
         'play-fair': ['play fair'],
         'rubik': ['rubik'],
         'satisfy': ['satisfy'],
-        'salsa': ['salsa']
+        'salsa': ['salsa'],
+        'saira' : ['saira stencil one']
       },
       colors:{
         'primary-color': '#04991C',
