@@ -4,7 +4,7 @@ import useFetch from "../hooks/useFetch";
 import { path } from "../utils/path";
 import DOMPurify from "dompurify";
 import { format } from "date-fns";
-import "../quillOutput.css";
+import quillStyle from "../quillOutput.module.css";
 const Post = () => {
   const { id } = useParams();
   const { data: post, error, loading } = useFetch(`${path}/get-post/${id}`);
