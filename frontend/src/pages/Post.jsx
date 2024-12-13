@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import useFetch from "../hooks/useFetch";
 import { path } from "../utils/path";
@@ -11,13 +11,39 @@ const Post = () => {
   console.log(post);
   const article = post && DOMPurify.sanitize(post.article);
   // console.log(post.article);
+  const [showSmallHeader, setShowSmallHeader] = useState(false);
+
+  const handleScroll = () => {
+    if (window.scrollY >= 50) {
+      setShowSmallHeader(true);
+    } else {
+      setShowSmallHeader(false);
+    }
+  };
+
+  useEffect(() => {
+    // Add scroll event listener
+    window.addEventListener("scroll", handleScroll);
+
+    // Cleanup function to remove the event listener
+    return () => {
+      window.removeEventListener("scroll", handleScroll);
+    };
+  }, []);
+
   return (
     <div className="">
       {loading && <p>Loading...</p>}
       {error && <p>Error: {error.message}</p>}
-      <div className="bg-primary-color p-16 relative">
-        <h1 className='absolute -bottom-5 font-saira text-white md:text-8xl '>Explained</h1>
-      </div>
+      {showSmallHeader ? (
+        <div className="bg-primary-color p-4 text-center text-white sticky top-0">{post && post.title}</div>
+      ) : (
+        <div className="bg-primary-color p-16 relative">
+          <h1 className="absolute -bottom-5 font-saira text-white md:text-8xl ">
+            Explained
+          </h1>
+        </div>
+      )}
       {post && (
         <div className="m-10 md:m-20">
           <div className="capitalize">
