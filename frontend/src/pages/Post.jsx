@@ -14,7 +14,7 @@ const Post = () => {
   const [showSmallHeader, setShowSmallHeader] = useState(false);
 
   const handleScroll = () => {
-    if (window.scrollY >= 50) {
+    if (window.scrollY > 300) {
       setShowSmallHeader(true);
     } else {
       setShowSmallHeader(false);
@@ -36,7 +36,7 @@ const Post = () => {
       {loading && <p>Loading...</p>}
       {error && <p>Error: {error.message}</p>}
       {showSmallHeader ? (
-        <div className="bg-primary-color p-4 text-center text-white sticky top-0">{post && post.title}</div>
+        <div className="bg-primary-color p-4 text-center text-white sticky top-0 transition-all ease-in-out">{post && post.title}</div>
       ) : (
         <div className="bg-primary-color p-16 relative">
           <h1 className="absolute -bottom-5 font-saira text-white md:text-8xl ">

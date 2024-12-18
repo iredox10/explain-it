@@ -13,8 +13,9 @@ const Home = () => {
       <div className="bg-primary-color p-10">
         <h1 className='font-saira text-2xl text-white'>Welcome to Home Page</h1>
       </div>
-      <div className="grid grid-cols-12 p-20  ">
-        <div className="col-span-3">
+      <div className="flex flex-col md:grid grid-cols-12 p-5 md:p-20  ">
+
+        <div className="col-span-3 order-5">
           {data &&
             data.map((category) => {
               if (category.priority > 4) {
@@ -50,8 +51,8 @@ const Home = () => {
             })}
         </div>
 
-        <div className="col-start-4 col-end-13">
-          <div className="flex flex-col-reverse">
+        <div className="order-1 md:col-start-4 col-end-13">
+          <div className="w-full flex flex-col-reverse">
             {data &&
               data.map((category) => {
                 if (category.priority <= 4) {
@@ -61,7 +62,7 @@ const Home = () => {
                         ? category.posts.map((post) => {
                             if (post.priority == 1) {
                               return (
-                                <div id={post._Id} className="px-20">
+                                <div id={post._Id} className="md:px-20">
                                   <Link to={`/big-post/${post._id}`}>
                                     <div className="w-full h-[15rem]">
                                       <img
@@ -70,13 +71,13 @@ const Home = () => {
                                         className="w-full object-cover h-full"
                                       />
                                     </div>
-                                    <div className="text-center my-4 px-12">
-                                      <p className="font-play-fair capitalize">
+                                    <div className="text-center my-4 md:px-12">
+                                      <p className="font-play-fair capitalize text-sm my-4">
                                         {" "}
-                                        <span className="">by:</span>
+                                        <span className="">by: </span>
                                         {post.author[0]}
                                       </p>
-                                      <p className=" font-play-fair text-5xl capitalize">
+                                      <p className=" font-play-fair text-5xl capitalize my-4">
                                         {post.title}
                                       </p>
                                       <div
@@ -98,7 +99,7 @@ const Home = () => {
               })}
           </div>
 
-          <div className="mx-20">
+          <div className="md:mx-20">
             {data &&
               data.map((category) => {
                 if (
@@ -110,7 +111,7 @@ const Home = () => {
                       <div className="my-4">
                         <div className="flex items-center justify-between gap-5 my-5">
                           <div className="w-full h-1 bg-yellow flex-shrink"></div>
-                          <p className="font-bold text-2xl flex-grow font-satisfy text-green-500">
+                          <p className="font-bold md:text-2xl flex-grow font-satisfy text-green-500 capitalize">
                             {" "}
                             {category.name}
                           </p>
@@ -125,7 +126,7 @@ const Home = () => {
                                 <p>{post.title}</p>
                                 <div
                                   dangerouslySetInnerHTML={{
-                                    __html: post.article.slice(0, 150),
+                                    __html: `${post.article.slice(0, 20)} ...`,
                                   }}
                                 ></div>
                               </div>
