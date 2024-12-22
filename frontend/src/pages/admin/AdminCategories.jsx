@@ -193,7 +193,7 @@ const AdminCategories = () => {
       )}
 
       <button
-        className="absolute right-4 bottom-5 bg-primary-color p-5 rounded-full text-white"
+        className="md:absolute right-4 md:bottom-5 top-5 bg-primary-color p-5 rounded-full text-white"
         onClick={() => setModel(!model)}
       >
         <FaPlus />

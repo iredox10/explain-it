@@ -15,7 +15,7 @@ const Home = () => {
       </div>
       <div className="flex flex-col md:grid grid-cols-12 p-5 md:p-20  ">
 
-        <div className="col-span-3 order-5">
+        <div className="md:col-span-3 ">
           {data &&
             data.map((category) => {
               if (category.priority > 4) {

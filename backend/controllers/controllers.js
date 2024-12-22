@@ -445,7 +445,7 @@ export const draft = async (req, res) => {
       await user.save();
       return res.status(201).json({ draft, user });
     } else {
-      const draft = await Draft.crate({
+      const draft = await Draft.create({
         userId: author._id,
         title: req.body.title,
         subTitle: req.body.subTitle,

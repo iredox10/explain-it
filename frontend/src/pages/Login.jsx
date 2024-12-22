@@ -32,7 +32,8 @@ const Login = () => {
         if (res.data.author.isAuthor) {
           localStorage.setItem("user", JSON.stringify(res.data.author));
           localStorage.setItem("jwtToken", JSON.stringify(res.data.jwtToken));
-          navigate(`/author/${res.data.author._id}`);
+          // navigate(`/author/${res.data.author._id}`);
+          navigate(`/author-dashboard/${res.data.author._id}`);
         }
       }
     } catch (err) {

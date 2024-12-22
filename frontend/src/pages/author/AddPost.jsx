@@ -125,6 +125,7 @@ const CreatePost = () => {
         }
       );
       console.log(res.data);
+      navigate(-1)
     } catch (err) {
       console.log(err);
     }

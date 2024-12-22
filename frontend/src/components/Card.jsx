@@ -4,7 +4,7 @@ import { Link } from 'react-router-dom'
 
 const Card = ({categories,model,deleteModel}) => {
   return (
-    <div className="absolute w-full top-[9rem] grid grid-cols-5 gap-5 text-center p-2 md:p-5">
+    <div className="md:absolute w-full top-[9rem] grid md:grid-cols-5 gap-5 text-center p-2 md:p-5">
       {categories &&
         categories.map((category) => (
           <div
