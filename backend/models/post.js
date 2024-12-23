@@ -1,4 +1,5 @@
 import mongoose, { mongo } from "mongoose";
+import slug from "slug";
 
 const post = await mongoose.Schema(
   {
@@ -6,6 +7,10 @@ const post = await mongoose.Schema(
     title: {
       type: String,
       required: true,
+      unique: true,
+    },
+    slug: {
+      type: String,
       unique: true,
     },
     subTitle: {
@@ -25,13 +30,19 @@ const post = await mongoose.Schema(
     priority: {
       type: Number,
     },
-    heading:{
+    heading: {
       type: Boolean,
-      default: false
-    }
+      default: false,
+    },
   },
   { timestamps: true }
 );
+
+post.pre("save", function () {
+  if (this.title) {
+    this.slug = slug(this.title);
+  }
+});
 
 const Post = await mongoose.model("post", post);
 

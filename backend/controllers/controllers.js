@@ -176,8 +176,8 @@ export const add_category = async (req, res) => {
 };
 export const edit_category = async (req, res) => {
   try {
-    const categories = await Category.findByIdAndUpdate(
-      { _id: req.params.id },
+    const categories = await Category.findOneAndUpdate(
+      { slug: req.params.category },
       req.body,
       { new: true }
     );
@@ -199,7 +199,8 @@ export const get_category = async (req, res) => {
 
 export const delete_category = async (req, res) => {
   try {
-    const category = await Category.findByIdAndDelete({ _id: req.params.id });
+    // const c = await Category.findOne({slug: req.params.category})
+    const category = await Category.findOneAndDelete({ slug: req.params.category });
     res.status(200).json(category);
   } catch (err) {
     res.status(403).json(err.message);
@@ -221,7 +222,7 @@ export const create_post = async (req, res) => {
   try {
     const user = await User.findById(req.params.id);
     const author = await Author.findById(req.params.id);
-    const category = await Category.findById(req.params.category_id);
+    const category = await Category.findOne({ slug: req.params.category_slug });
 
     const posts = await Post.find();
     if (!author) {

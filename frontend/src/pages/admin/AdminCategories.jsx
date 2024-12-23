@@ -12,6 +12,7 @@ import { Link } from "react-router-dom";
 const AdminCategories = () => {
   const [categories, setCategories] = useState(null);
   const [name, setName] = useState("");
+  const [slug, setSlug] = useState("");
   const [about, setAbout] = useState("");
   const [priority, setPriority] = useState();
   const [categoryId, setCategoryId] = useState();
@@ -59,15 +60,16 @@ const AdminCategories = () => {
     }
   };
 
-  const showEditModel = async (id) => {
+  const showEditModel = async (category) => {
     try {
-      const res = await axios.get(`${path}/get-category/${id}`);
+      const res = await axios.get(`${path}/get-category/${category}`);
       console.log(res.data);
       if (res.status == 200) {
         setEditModel(true);
         setLoading(true);
         setTimeout(() => {
           setName(res.data.name);
+          setSlug(res.data.slug);
           setAbout(res.data.about);
           setPriority(res.data.priority);
           setCategoryId(res.data._id);
@@ -78,15 +80,17 @@ const AdminCategories = () => {
       console.log(error);
     }
   };
-  const showDeleteModel = async (id) => {
+  const showDeleteModel = async (slug) => {
+    console.log(slug)
     try {
-      const res = await axios.get(`${path}/get-category/${id}`);
+      const res = await axios.get(`${path}/get-category/${slug}`);
       console.log(res.data);
       if (res.status == 200) {
         setDeleteModel(true);
         setLoading(true);
         setTimeout(() => {
           setName(res.data.name);
+          setSlug(res.data.slug);
           setAbout(res.data.about);
           setPriority(res.data.priority);
           setCategoryId(res.data._id);
@@ -97,10 +101,11 @@ const AdminCategories = () => {
       console.log(error);
     }
   };
-  const handleDelete = async (id) => {
+  const handleDelete = async (category) => {
     const token = JSON.parse(localStorage.getItem("jwtToken"));
+    console.log(category)
     try {
-      const res = await axios.delete(`${path}/delete-category/${id}`, {
+      const res = await axios.delete(`${path}/delete-category/${category}`, {
         headers: {
           Authorization: `Bearer ${token}`,
         },
@@ -115,12 +120,12 @@ const AdminCategories = () => {
     }
   };
 
-  const handleEdit = async (e, id) => {
+  const handleEdit = async (e, category) => {
     e.preventDefault();
     const token = JSON.parse(localStorage.getItem("jwtToken"));
     try {
       const res = await axios.patch(
-        `${path}/edit-category/${id}`,
+        `${path}/edit-category/${catogery}`,
         {
           name,
           about,
@@ -144,6 +149,7 @@ const AdminCategories = () => {
   return (
     <div className="">
       <Header />
+
       {categories && (
         <Card
           categories={categories}
@@ -151,6 +157,7 @@ const AdminCategories = () => {
           deleteModel={showDeleteModel}
         ></Card>
       )}
+
       {model && (
         <div className="absolute left-[50%] translate-x-[-50%] w-full bg-secondary-color/60 top-0 bottom-0 ">
           <div className="flex place-content-center my-[7rem]">
@@ -242,7 +249,7 @@ const AdminCategories = () => {
                 </h1>
                 <div className="flex justify-between p-9">
                   <button onClick={() => setDeleteModel(false)}>No</button>
-                  <button onClick={() => handleDelete(categoryId)}>Yes</button>
+                  <button onClick={() => handleDelete(slug)}>Yes</button>
                 </div>
               </div>{" "}
             </div>

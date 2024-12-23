@@ -47,7 +47,7 @@ const CreatePost = () => {
       return;
     } else {
       setError("");
-    setCoverIge(file);
+    setCoverImage(file);
       const reader = new FileReader();
       reader.onload = (e) => {
         setpreviewImage(e.target.result);

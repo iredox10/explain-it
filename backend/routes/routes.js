@@ -33,16 +33,16 @@ route.post("/login", controller.login);
 
 route.post("/add-category", verifyAdmin, controller.add_category);
 
-route.patch("/edit-category/:id", verifyAdmin, controller.edit_category);
+route.patch("/edit-category/:category", verifyAdmin, controller.edit_category);
 
 route.get("/get-categories", controller.get_categories);
 
 route.get("/get-category/:slug", controller.get_category);
 
-route.delete("/delete-category/:id", verifyAdmin, controller.delete_category);
+route.delete("/delete-category/:category", verifyAdmin, controller.delete_category);
 
 route.post(
-  "/post-article/:id/:category_id?",
+  "/post-article/:id/:category_slug?",
   verifyAuthorOrAdmin,
   controller.create_post
 );

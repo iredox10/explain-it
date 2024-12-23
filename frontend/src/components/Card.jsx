@@ -14,7 +14,7 @@ const Card = ({categories,model,deleteModel}) => {
             <p className="font-bold my-8 ">{category.name}</p>
             <div className="text-center flex w-full justify-center gap-5">
               <Link
-                to={`/admin/category/${category._id}`}
+                to={`/admin/category/${category.slug}`}
                 className="text-center"
               >
                 <p className="text-center flex flex-col text-primary-color ">
@@ -24,7 +24,7 @@ const Card = ({categories,model,deleteModel}) => {
                   <span>view</span>
                 </p>
               </Link>
-              <button type="button" onClick={() => model(category._id)}>
+              <button type="button" onClick={() => model(category.slug)}>
                 <p className="text-center flex flex-col text-primary-color">
                   <div className="flex w-full justify-center">
                     <FaEdit className="" />
@@ -32,7 +32,7 @@ const Card = ({categories,model,deleteModel}) => {
                   <span>edit</span>
                 </p>
               </button>
-              <button onClick={() => deleteModel(category._id)}>
+              <button onClick={() => deleteModel(category.slug)}>
                 <p className="text-center flex flex-col text-red-600 ">
                   <div className="flex w-full justify-center">
                     <FaTrashAlt className="" />

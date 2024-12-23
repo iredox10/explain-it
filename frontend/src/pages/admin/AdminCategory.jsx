@@ -111,7 +111,7 @@ const AdminCategory = () => {
       </div>
       <Link
         className="absolute right-4 bottom-5 bg-primary-color p-5 rounded-full text-white"
-        to={`/create-post/${category && category._id}`}
+        to={`/create-post/${category && category.slug}`}
       >
         <FaPlus />
       </Link>
