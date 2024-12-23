@@ -76,7 +76,7 @@ const AdminCategory = () => {
                   <p className="font-bold my-8 ">{post.title}</p>
                   <div className="text-center flex w-full justify-center gap-5">
                     <Link
-                      to={`/admin/post/${post._id}`}
+                      to={`/post/${post._id}`}
                       className="text-center"
                     >
                       <p className="text-center flex flex-col text-primary-color ">

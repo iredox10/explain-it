@@ -15,12 +15,12 @@ import CreatePost from "./pages/CreatePost";
 import Post from "./pages/Post";
 import DraftedPost from "./pages/DraftedPost";
 import EditPost from "./pages/EditPost";
-import AdminPost from "./pages/admin/AdminPost";
 import AddPost from "./pages/author/AddPost";
 import NotFoud from "./pages/NotFoud";
 import BigPost from "./pages/BigPost";
 import Dashboard from "./pages/author/Dashboard";
 import Drafts from "./pages/author/Drafts";
+import CategoryPage from "./pages/CategoryPage";
 
 function App() {
   const user = useUserStore((state) => state.user);
@@ -44,7 +44,6 @@ function App() {
           <Route path="/admin" element={<Admin />} />
           <Route path="/admin/category/:id" element={<AdminCategory />} />
           <Route path="/admin/categories" element={<AdminCategories />} />
-          <Route path="/admin/post/:id" element={<AdminPost />} />
           <Route path="/admin/authors" element={<Authors />} />
           <Route path="/admin/author/:id" element={<Author />} />
           <Route path="/admin/drafts" element={<AdminDrafts />} />
@@ -62,6 +61,8 @@ function App() {
           <Route path="author-dashboard/:id" element={<Dashboard />} />
 
           <Route path="author-drafts/:id" element={<Drafts />} />
+
+          <Route path="/:categoryId" element={<CategoryPage />} />
 
           <Route path="*" element={<NotFoud />} />
         </Routes>

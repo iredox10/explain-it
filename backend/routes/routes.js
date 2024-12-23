@@ -37,7 +37,7 @@ route.patch("/edit-category/:id", verifyAdmin, controller.edit_category);
 
 route.get("/get-categories", controller.get_categories);
 
-route.get("/get-category/:id", controller.get_category);
+route.get("/get-category/:slug", controller.get_category);
 
 route.delete("/delete-category/:id", verifyAdmin, controller.delete_category);
 

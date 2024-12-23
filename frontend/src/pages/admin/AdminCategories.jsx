@@ -20,7 +20,6 @@ const AdminCategories = () => {
   const [loading, setLoading] = useState(false);
   const [deleteModel, setDeleteModel] = useState(false);
 
-
   const fetchCategories = async () => {
     try {
       const res = await axios(`${path}/get-categories`);
@@ -101,14 +100,11 @@ const AdminCategories = () => {
   const handleDelete = async (id) => {
     const token = JSON.parse(localStorage.getItem("jwtToken"));
     try {
-      const res = await axios.delete(
-        `${path}/delete-category/${id}`,
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        }
-      );
+      const res = await axios.delete(`${path}/delete-category/${id}`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
       if (res.status == 200) {
         setDeleteModel(false);
         await fetchCategories();
@@ -119,9 +115,8 @@ const AdminCategories = () => {
     }
   };
 
-
   const handleEdit = async (e, id) => {
-    e.preventDefault()
+    e.preventDefault();
     const token = JSON.parse(localStorage.getItem("jwtToken"));
     try {
       const res = await axios.patch(
@@ -192,12 +187,6 @@ const AdminCategories = () => {
         </div>
       )}
 
-      <button
-        className="md:absolute right-4 md:bottom-5 top-5 bg-primary-color p-5 rounded-full text-white"
-        onClick={() => setModel(!model)}
-      >
-        <FaPlus />
-      </button>
       {editModel && (
         <div className="absolute left-[50%] translate-x-[-50%] w-full bg-secondary-color/60 top-0 bottom-0 ">
           <div className="flex place-content-center my-[7rem]">
@@ -260,6 +249,12 @@ const AdminCategories = () => {
           )}
         </div>
       )}
+      <button
+        className="absolute right-4 bottom-5 top-5 bg-primary-color p-5 rounded-full text-white"
+        onClick={() => setModel(!model)}
+      >
+        <FaPlus />
+      </button>
     </div>
   );
 };

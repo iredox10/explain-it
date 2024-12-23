@@ -64,7 +64,7 @@ export const get_author = async (req, res) => {
   try {
     const author = await Author.findById(req.params.id);
     const posts = await Author.findById(req.params.id).populate("posts");
-    res.status(200).json({ author, posts: posts});
+    res.status(200).json({ author, posts: posts });
   } catch (err) {
     res.status(404).json(err.message);
   }
@@ -188,7 +188,9 @@ export const edit_category = async (req, res) => {
 };
 export const get_category = async (req, res) => {
   try {
-    const category = await Category.findById(req.params.id).populate("posts");
+    const category = await Category.findOne({ slug: req.params.slug }).populate(
+      "posts"
+    );
     res.status(200).json(category);
   } catch (err) {
     res.status(403).json(err.message);

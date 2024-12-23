@@ -1,10 +1,11 @@
 import React, { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 import useFetch from "../hooks/useFetch";
 import { path } from "../utils/path";
 import DOMPurify from "dompurify";
 import { format } from "date-fns";
-import quillStyle from "../quillOutput.module.css";
+import styled from "styled-components";
+// import quillStyle from "../quillOutput.module.css";
 const Post = () => {
   const { id } = useParams();
   const { data: post, error, loading } = useFetch(`${path}/get-post/${id}`);
@@ -31,23 +32,40 @@ const Post = () => {
     };
   }, []);
 
+  const StyledDiv = styled.div`
+  h2{
+    color: #1aa71a;
+    font-size: 1.8rem;
+  }
+    a {
+      text-decoration: green underline;
+      transition: .2s ease;
+    }
+    a:hover{
+      background: green;
+      color: white;
+    }
+  `;
+
   return (
     <div className="">
       {loading && <p>Loading...</p>}
       {error && <p>Error: {error.message}</p>}
-      {showSmallHeader ? (
-        <div className="bg-primary-color p-4 text-center text-white sticky top-0 transition-all ease-in-out">{post && post.title}</div>
-      ) : (
-        <div className="bg-primary-color p-16 relative">
-          <h1 className="absolute -bottom-5 font-saira text-white md:text-8xl ">
-            Explained
-          </h1>
+      {showSmallHeader && (
+        <div className="bg-primary-color p-4 text-center text-white sticky top-0 transition-all ease-in-out">
+          {post && post.title}
         </div>
       )}
+
+      <div className="bg-primary-color p-16 relative">
+        <h1 className="absolute -bottom-5 font-saira text-white md:text-8xl ">
+          Explained
+        </h1>
+      </div>
       {post && (
         <div className="m-10 md:m-20">
           <div className="capitalize">
-            <p>{post.category}</p>
+            <Link to={`/${post.category}`}>{post.category}</Link>
             <h1 className="font-bold text-6xl">{post.title}</h1>
             <p className="font-bold text-lg text-black/50">{post.subTitle}</p>
             <div className="my-2 text-sm">
@@ -70,7 +88,7 @@ const Post = () => {
             </div>
             <div className="my-5 md:w-3/4 md:text-lg ">
               {article && (
-                <div
+                <StyledDiv
                   className="leading-8 text-justify"
                   dangerouslySetInnerHTML={{ __html: article }}
                 />

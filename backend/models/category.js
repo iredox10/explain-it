@@ -1,13 +1,18 @@
 import mongoose from "mongoose";
+import slug from "slug";
 
 const category = await mongoose.Schema(
   {
     name: {
       type: String,
       requred: true,
-      unique: true
+      unique: true,
     },
-    about:{
+    slug: {
+      type: String,
+      unique: true,
+    },
+    about: {
       type: String,
     },
     posts: [
@@ -16,11 +21,17 @@ const category = await mongoose.Schema(
         type: mongoose.Types.ObjectId,
       },
     ],
-    priority: Number
+    priority: Number,
   },
   { timestamps: true }
 );
 
+category.pre("save", function () {
+  if (this.name) {
+    this.slug = slug(this.name);
+  }
+});
+
 const Category = await mongoose.model("category", category);
 
-export default Category
+export default Category;
