@@ -20,6 +20,7 @@ import AddPost from "./pages/author/AddPost";
 import NotFoud from "./pages/NotFoud";
 import BigPost from "./pages/BigPost";
 import Dashboard from "./pages/author/Dashboard";
+import Drafts from "./pages/author/Drafts";
 
 function App() {
   const user = useUserStore((state) => state.user);
@@ -31,7 +32,7 @@ function App() {
     // useUserStore.setState({ user: user });
   }, []);
   return (
-    <div className="bg-secondary-color  font-rubik">
+    <div className="bg-secondary-color h-full font-rubik">
       <Router>
         <Routes>
           <Route path="/" element={<Home />} />
@@ -60,7 +61,7 @@ function App() {
 
           <Route path="author-dashboard/:id" element={<Dashboard />} />
 
-          <Route path="author-dashboard/:id" element={<Dashboard />} />
+          <Route path="author-drafts/:id" element={<Drafts />} />
 
           <Route path="*" element={<NotFoud />} />
         </Routes>

@@ -13,7 +13,7 @@ const Dashboard = () => {
         </div>
 
         <div className="bg-white p-8 capitalize">
-          <NavLink to={`/author-draft/${id}`}>Drafts</NavLink>
+          <NavLink to={`/author-drafts/${id}`}>Drafts</NavLink>
         </div>
       </div>
     </div>

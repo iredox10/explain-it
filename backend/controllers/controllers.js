@@ -64,7 +64,7 @@ export const get_author = async (req, res) => {
   try {
     const author = await Author.findById(req.params.id);
     const posts = await Author.findById(req.params.id).populate("posts");
-    res.status(200).json({ author, posts: posts.posts });
+    res.status(200).json({ author, posts: posts});
   } catch (err) {
     res.status(404).json(err.message);
   }
@@ -470,13 +470,13 @@ export const draft = async (req, res) => {
 export const get_user_drafts = async (req, res) => {
   try {
     const user = await User.findById(req.params.id);
-    const author = await Author.findById(req.params.id);
-
     if (user) {
       const userDrafts = await User.findById(req.params.id).populate("drafts");
       return res.status(200).json(userDrafts);
     } else {
-      const authorDrafts = await Author.findById(user._id).populate("drafts");
+      const authorDrafts = await Author.findById(req.params.id).populate(
+        "drafts"
+      );
       return res.status(200).json(authorDrafts);
     }
   } catch (err) {
