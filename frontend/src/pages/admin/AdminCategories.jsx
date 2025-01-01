@@ -208,10 +208,12 @@ const AdminCategories = () => {
       )}
 
       {editModel && (
-        <div className="absolute left-[50%] translate-x-[-50%] w-full bg-secondary-color/60 top-0 bottom-0 ">
-          <div className="flex place-content-center my-[7rem]">
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center">
+          <div className="bg-white rounded-lg shadow-xl w-full max-w-md p-6 m-4">
             {loading ? (
-              "loading"
+              <div className="flex justify-center items-center h-32">
+                <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary-color"></div>
+              </div>
             ) : (
               <Form
                 onsubmit={(e) => handleEdit(e, categoryId)}
@@ -219,31 +221,42 @@ const AdminCategories = () => {
                 subtitle={`Edit ${name}`}
                 close={() => setEditModel(false)}
               >
-                <FormInput
-                  type={"text"}
-                  label={"name"}
-                  labelFor={"name"}
-                  name={"name"}
-                  value={name}
-                  onchange={(e) => setName(e.target.value)}
-                />
-                <FormInput
-                  type={"text"}
-                  label={"about"}
-                  labelFor={"about"}
-                  name={"about"}
-                  value={about}
-                  onchange={(e) => setAbout(e.target.value)}
-                />
-                <FormInput
-                  type={"number"}
-                  label={"priority"}
-                  labelFor={"priority"}
-                  name={"priority"}
-                  value={priority}
-                  onchange={(e) => setPriority(e.target.value)}
-                />
-                <FormBtn text={"edit category"} />
+                <div className="space-y-4">
+                  <FormInput
+                    type="text"
+                    label="Category Name"
+                    labelFor="name"
+                    name="name"
+                    value={name}
+                    onchange={(e) => setName(e.target.value)}
+                    className="w-full rounded-md border-gray-300 shadow-sm focus:border-primary-color focus:ring focus:ring-primary-color focus:ring-opacity-50"
+                  />
+                  <FormInput
+                    type="text"
+                    label="Description"
+                    labelFor="about" 
+                    name="about"
+                    value={about}
+                    onchange={(e) => setAbout(e.target.value)}
+                    className="w-full rounded-md border-gray-300 shadow-sm focus:border-primary-color focus:ring focus:ring-primary-color focus:ring-opacity-50"
+                  />
+                  <FormInput
+                    type="number"
+                    label="Priority Level"
+                    labelFor="priority"
+                    name="priority"
+                    value={priority}
+                    placeholder="Enter priority (1-10)"
+                    min="1"
+                    max="10"
+                    onchange={(e) => setPriority(e.target.value)}
+                    className="w-full rounded-md border-gray-300 shadow-sm focus:border-primary-color focus:ring focus:ring-primary-color focus:ring-opacity-50"
+                  />
+                  <FormBtn 
+                    text="Save Changes"
+                    className="w-full bg-primary-color text-white py-2 px-4 rounded-md hover:bg-primary-color/90 transition-colors"
+                  />
+                </div>
               </Form>
             )}
           </div>
@@ -251,29 +264,41 @@ const AdminCategories = () => {
       )}
 
       {deleteModel && (
-        <div className="absolute left-[50%] translate-x-[-50%] w-full bg-secondary-color/60 top-0 bottom-0 ">
+        <div className="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center">
           {loading ? (
-            "loading"
+            <div className="flex items-center justify-center">
+              <div className="animate-spin rounded-full h-12 w-12 border-4 border-primary-color border-t-transparent"></div>
+            </div>
           ) : (
-            <div className="flex place-content-center my-[7rem]   ">
-              <div className=" border-2 border-primary-color">
-                <h1 className="bg-primary-color p-5 capitalize text-white">
-                  are you sure you want to delete {name}
+            <div className="bg-white rounded-lg shadow-xl max-w-md w-full mx-4">
+              <div className="border border-primary-color rounded-lg overflow-hidden">
+                <h1 className="bg-primary-color p-6 text-xl font-semibold text-white text-center">
+                  Are you sure you want to delete "{name}"?
                 </h1>
-                <div className="flex justify-between p-9">
-                  <button onClick={() => setDeleteModel(false)}>No</button>
-                  <button onClick={() => handleDelete(slug)}>Yes</button>
+                <div className="flex justify-center gap-4 p-6">
+                  <button 
+                    onClick={() => setDeleteModel(false)}
+                    className="px-6 py-2 rounded-md border-2 border-gray-300 text-gray-700 hover:bg-gray-100 transition-colors font-medium"
+                  >
+                    Cancel
+                  </button>
+                  <button 
+                    onClick={() => handleDelete(slug)}
+                    className="px-6 py-2 rounded-md bg-red-500 text-white hover:bg-red-600 transition-colors font-medium"
+                  >
+                    Delete
+                  </button>
                 </div>
-              </div>{" "}
+              </div>
             </div>
           )}
         </div>
       )}
       <button
-        className="absolute right-4 bottom-5 top-5 bg-primary-color p-5 rounded-full text-white"
+        className="fixed right-8 bottom-8 bg-primary-color p-4 rounded-full text-white shadow-lg hover:bg-primary-color/90 transition-colors"
         onClick={() => setModel(!model)}
       >
-        <FaPlus />
+        <FaPlus className="w-6 h-6" />
       </button>
     </div>
   );

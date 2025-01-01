@@ -159,57 +159,86 @@ const Authors = () => {
   return (
     <div>
       <Header />
-      <div className="absolute w-full top-[9rem] grid grid-cols-5 gap-5 text-center p-2 md:p-5">
-        {authors
-          ? authors.activeAuthors.map((author) => (
-              <div>
-                <div
-                  className="bg-secondary-color drop-shadow-2xl px-4 pt-10 pb-7 capitalize"
-                  key={author._id}
-                >
-                  <p className="font-bold my-8 ">{author.fullname}</p>
-                  <div className="text-center flex w-full justify-center gap-5">
-                    <Link
-                      to={`/admin/author/${author._id}`}
-                      className="text-center"
-                    >
-                      <p className="text-center flex flex-col text-primary-color ">
-                        <div className="flex w-full justify-center">
-                          <FaEye className="" />
-                        </div>
-                        <span>view</span>
-                      </p>
-                    </Link>
-                    <button
-                      onClick={() =>
-                        findAuthorAndShowModel(author._id, setEditModel)
-                      }
-                    >
-                      <p className="text-center flex flex-col text-primary-color">
-                        <div className="flex w-full justify-center">
-                          <FaEdit className="" />
-                        </div>
-                        <span>edit</span>
-                      </p>
-                    </button>
-
-                    <button
-                      onClick={() =>
-                        findAuthorAndShowModel(author._id, setShowDeleteModel)
-                      }
-                    >
-                      <p className="text-center flex flex-col text-red-600 ">
-                        <div className="flex w-full justify-center">
-                          <FaTrashAlt className="" />
-                        </div>
-                        <span>delete</span>
-                      </p>
-                    </button>
-                  </div>
-                </div>
-              </div>
-            ))
-          : "no user yet"}
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        <div className="overflow-x-auto">
+          <table className="min-w-full bg-white rounded-lg overflow-hidden shadow-md">
+            <thead className="bg-gray-50">
+              <tr>
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Name</th>
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Username</th>
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">About</th>
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Position</th>
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Social Media</th>
+                <th className="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">Actions</th>
+              </tr>
+            </thead>
+            <tbody className="divide-y divide-gray-200">
+              {authors ? (
+                authors.activeAuthors.map((author) => (
+                  <tr key={author._id} className="hover:bg-gray-50">
+                    <td className="px-6 py-4 whitespace-nowrap">
+                      <div className="text-sm font-medium text-gray-900">{author.fullname}</div>
+                    </td>
+                    <td className="px-6 py-4 whitespace-nowrap">
+                      <div className="text-sm text-gray-500">{author.username}</div>
+                    </td>
+                    <td className="px-6 py-4">
+                      <div className="text-sm text-gray-500 max-w-xs truncate">{author.about}</div>
+                    </td>
+                    <td className="px-6 py-4 whitespace-nowrap">
+                      <div className="text-sm text-gray-500">{author.position}</div>
+                    </td>
+                    <td className="px-6 py-4">
+                      <div className="flex gap-2">
+                        {author.facebook && (
+                          <a href={author.facebook} target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:text-blue-800">
+                            Facebook
+                          </a>
+                        )}
+                        {author.twitter && (
+                          <a href={author.twitter} target="_blank" rel="noopener noreferrer" className="text-blue-400 hover:text-blue-600">
+                            Twitter
+                          </a>
+                        )}
+                      </div>
+                    </td>
+                    <td className="px-6 py-4 whitespace-nowrap text-right">
+                      <div className="flex justify-end gap-4">
+                        <Link
+                          to={`/admin/author/${author._id}`}
+                          className="text-blue-600 hover:text-blue-800 transition-colors"
+                          title="View"
+                        >
+                          <FaEye className="h-5 w-5" />
+                        </Link>
+                        <button
+                          onClick={() => findAuthorAndShowModel(author._id, setEditModel)}
+                          className="text-green-600 hover:text-green-800 transition-colors"
+                          title="Edit"
+                        >
+                          <FaEdit className="h-5 w-5" />
+                        </button>
+                        <button
+                          onClick={() => findAuthorAndShowModel(author._id, setShowDeleteModel)}
+                          className="text-red-600 hover:text-red-800 transition-colors"
+                          title="Delete"
+                        >
+                          <FaTrashAlt className="h-5 w-5" />
+                        </button>
+                      </div>
+                    </td>
+                  </tr>
+                ))
+              ) : (
+                <tr>
+                  <td colSpan="6" className="px-6 py-4 text-center text-sm text-gray-500">
+                    No authors yet
+                  </td>
+                </tr>
+              )}
+            </tbody>
+          </table>
+        </div>
       </div>
       {showModel && (
         <div className="absolute left-[50%] translate-x-[-50%] w-full bg-secondary-color/80 top-0 bottom-0 ">

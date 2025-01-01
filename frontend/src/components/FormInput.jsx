@@ -2,8 +2,11 @@ import React from "react";
 
 const FormInput = ({ label, labelFor, name, type, onchange, value}) => {
   return (
-    <div className="my-3 capitalize">
-      <label htmlFor={labelFor} className="my-3 text-primary-color">
+    <div className="mb-4">
+      <label 
+        htmlFor={labelFor} 
+        className="block text-sm font-medium text-primary-color mb-2 capitalize"
+      >
         {label}
       </label>
       <input
@@ -11,7 +14,7 @@ const FormInput = ({ label, labelFor, name, type, onchange, value}) => {
         name={name}
         onChange={onchange}
         value={value}
-        className="w-full p-1 border-2 border-primary-color bg-secondary-color"
+        className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-primary-color focus:border-primary-color bg-white transition duration-200 ease-in-out"
       />
     </div>
   );
