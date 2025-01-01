@@ -189,7 +189,10 @@ export const edit_category = async (req, res) => {
 export const get_category = async (req, res) => {
   try {
     const category = await Category.findOne({ slug: req.params.slug }).populate(
-      "posts"
+      {
+        path: "posts",
+        options: { sort: { createdAt: -1 } }
+      }
     );
     res.status(200).json(category);
   } catch (err) {
