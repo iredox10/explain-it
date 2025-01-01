@@ -139,20 +139,50 @@ const CreatePost = () => {
   return (
     <div>
       <NsHeader headerText={`Create New Post`} />
+
       <div className="absolute w-4/6 drop-shadow-2xl top-[9rem] left-[4rem] py-4 bg-secondary-color">
+
         <form onSubmit={handleSubmit}>
           {error && error}
-          <div className="flex justify-end">
-            <input
-              type="file"
-              name="coverImage"
-              id="coverImage"
-              className="border-2 border-green-500 "
-              placeholder="add cover image"
-              onChange={(e) => handleCoverImageChange(e)}
-            />
+          <div className="flex flex-col space-y-2 p-4">
+            <div className="flex items-center space-x-2">
+              <button 
+                onClick={() => document.getElementById('coverImage').click()}
+                className="px-4 py-2 text-gray-600 bg-gray-100 hover:bg-gray-200 rounded-md transition-colors text-sm font-medium flex items-center gap-2"
+              >
+                <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                </svg>
+                Add a cover image
+              </button>
+              <input
+                type="file"
+                name="coverImage"
+                id="coverImage"
+                className="hidden"
+                onChange={(e) => handleCoverImageChange(e)}
+                accept="image/png,image/jpeg,image/webp"
+              />
+            </div>
             {coverImage && (
-              <img src={previewImage} style={{ width: "200px" }} />
+              <div className="relative">
+                <img 
+                  src={previewImage}
+                  alt="Cover preview" 
+                  className="max-h-[150px] w-full object-cover rounded-md"
+                />
+                <button
+                  onClick={() => {
+                    setCoverImage(null);
+                    setpreviewImage("");
+                  }}
+                  className="absolute top-2 right-2 p-1 bg-gray-900/50 hover:bg-gray-900/75 rounded-full text-white transition-colors"
+                >
+                  <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+                    <path fillRule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clipRule="evenodd" />
+                  </svg>
+                </button>
+              </div>
             )}
           </div>
           <div className="flex flex-col">

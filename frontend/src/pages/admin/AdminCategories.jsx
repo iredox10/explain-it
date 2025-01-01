@@ -159,38 +159,51 @@ const AdminCategories = () => {
       )}
 
       {model && (
-        <div className="absolute left-[50%] translate-x-[-50%] w-full bg-secondary-color/60 top-0 bottom-0 ">
-          <div className="flex place-content-center my-[7rem]">
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center">
+          <div className="bg-white rounded-lg shadow-xl w-full max-w-md p-6 m-4">
             <Form
               onsubmit={handleSubmit}
-              title={"Category"}
-              subtitle={"add Category"}
+              title="Add New Category"
+              subtitle="Create a new category for articles"
               close={() => setModel(false)}
             >
-              <FormInput
-                type={"text"}
-                label={"name"}
-                labelFor={"name"}
-                name={"name"}
-                onchange={(e) => setName(e.target.value)}
-              />
-              <FormInput
-                type={"text"}
-                label={"about"}
-                labelFor={"about"}
-                name={"about"}
-                onchange={(e) => setAbout(e.target.value)}
-              />
-              <FormInput
-                type={"number"}
-                label={"priority"}
-                labelFor={"priority"}
-                name={"priority"}
-                onchange={(e) => setPriority(e.target.value)}
-              />
-              <FormBtn text={"add category"} />
+              <div className="space-y-4">
+                <FormInput
+                  type="text"
+                  label="Category Name"
+                  labelFor="name"
+                  name="name"
+                  placeholder="Enter category name"
+                  onchange={(e) => setName(e.target.value)}
+                  className="w-full rounded-md border-gray-300 shadow-sm focus:border-primary-color focus:ring focus:ring-primary-color focus:ring-opacity-50"
+                />
+                <FormInput
+                  type="text"
+                  label="Description" 
+                  labelFor="about"
+                  name="about"
+                  placeholder="Enter category description"
+                  onchange={(e) => setAbout(e.target.value)}
+                  className="w-full rounded-md border-gray-300 shadow-sm focus:border-primary-color focus:ring focus:ring-primary-color focus:ring-opacity-50"
+                />
+                <FormInput
+                  type="number"
+                  label="Priority Level"
+                  labelFor="priority"
+                  name="priority"
+                  placeholder="Enter priority (1-10)"
+                  min="1"
+                  max="10"
+                  onchange={(e) => setPriority(e.target.value)}
+                  className="w-full rounded-md border-gray-300 shadow-sm focus:border-primary-color focus:ring focus:ring-primary-color focus:ring-opacity-50"
+                />
+                <FormBtn 
+                  text="Create Category"
+                  className="w-full bg-primary-color text-white py-2 px-4 rounded-md hover:bg-primary-color/90 transition-colors"
+                />
+              </div>
             </Form>
-          </div>{" "}
+          </div>
         </div>
       )}
 
