@@ -9,145 +9,141 @@ const Home = () => {
   console.log(data);
 
   return (
-    <div className="">
-      <div className="bg-primary-color p-10">
-        <h1 className='font-saira text-2xl text-white'>Welcome to Home Page</h1>
-      </div>
-      <div className="flex flex-col md:grid grid-cols-12 p-5 md:p-20  ">
+    <div className="min-h-screen">
+      <header className="bg-primary-color py-12 px-6 text-center">
+        <h1 className='font-saira text-4xl text-white font-bold'>Latest Articles</h1>
+      </header>
 
-        <div className="md:col-span-3 ">
-          {data &&
-            data.map((category) => {
+      <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
+          
+          {/* Sidebar */}
+          <aside className="lg:col-span-3 space-y-8">
+            {data?.map((category) => {
               if (category.priority > 4) {
                 return (
-                  <div>
-                    {category.posts.length > 0
-                      ? category.posts.map((post) => (
-                          <div className="capitalize mb-9 border-2 border-primary-color p-2 ">
-                            <Link to={`/post/${post._id}`}>
-                              <p className="font-medium">{post.category}</p>
-                              <div>
-                                <p className="font-play-fair  font-bold text-xl">
-                                  {post.title}
-                                </p>
-                                <div
-                                  dangerouslySetInnerHTML={{
-                                    __html: post.article.slice(0, 100),
-                                  }}
-                                  className="my-2"
-                                ></div>
-                                <p>
-                                  <span className="font-bold">By </span>
-                                  {post.author[0]}
-                                </p>
-                              </div>
-                            </Link>
-                          </div>
-                        ))
-                      : null}
+                  <div key={category._id}>
+                    {category.posts.length > 0 && category.posts.map((post) => (
+                      <Link 
+                        key={post._id}
+                        to={`/post/${post._id}`}
+                        className="block p-4 border-2 border-primary-color hover:border-primary-color/80 transition-colors mb-6 rounded-lg"
+                      >
+                        <p className="text-sm font-medium text-primary-color uppercase tracking-wide mb-2">
+                          {post.category}
+                        </p>
+                        <h3 className="font-play-fair font-bold text-xl mb-3 line-clamp-2">
+                          {post.title}
+                        </h3>
+                        <div
+                          className="prose prose-sm mb-3 line-clamp-3"
+                          dangerouslySetInnerHTML={{
+                            __html: post.article.slice(0, 100),
+                          }}
+                        />
+                        <p className="text-sm text-gray-600">
+                          <span className="font-medium">By </span>
+                          {post.author[0]}
+                        </p>
+                      </Link>
+                    ))}
                   </div>
                 );
               }
             })}
-        </div>
+          </aside>
 
-        <div className="order-1 md:col-start-4 col-end-13">
-          <div className="w-full flex flex-col-reverse">
-            {data &&
-              data.map((category) => {
+          {/* Main Content */}
+          <div className="lg:col-span-9 space-y-12">
+            
+            {/* Featured Post */}
+            <section>
+              {data?.map((category) => {
                 if (category.priority <= 4) {
-                  return (
-                    <div className="">
-                      {category.posts.length > 0
-                        ? category.posts.map((post) => {
-                            if (post.priority == 1) {
-                              return (
-                                <div id={post._Id} className="md:px-20">
-                                  <Link to={`/big-post/${post._id}`}>
-                                    <div className="w-full h-[15rem]">
-                                      <img
-                                        src={post.coverImage}
-                                        alt=""
-                                        className="w-full object-cover h-full"
-                                      />
-                                    </div>
-                                    <div className="text-center my-4 md:px-12">
-                                      <p className="font-play-fair capitalize text-sm my-4">
-                                        {" "}
-                                        <span className="">by: </span>
-                                        {post.author[0]}
-                                      </p>
-                                      <p className=" font-play-fair text-5xl capitalize my-4">
-                                        {post.title}
-                                      </p>
-                                      <div
-                                        className="font-rubik"
-                                        dangerouslySetInnerHTML={{
-                                          __html: post.article.slice(0, 200),
-                                        }}
-                                      ></div>
-                                    </div>
-                                  </Link>
-                                </div>
-                              );
-                            }
-                          })
-                        : null}
-                    </div>
-                  );
-                }
-              })}
-          </div>
-
-          <div className="md:mx-20">
-            {data &&
-              data.map((category) => {
-                if (
-                  category.priority < 4 &&
-                  category.posts.map((post) => post.priority) !== 1
-                ) {
-                  return (
-                    <div className="my-2">
-                      <div className="my-4">
-                        <div className="flex items-center justify-between gap-5 my-5">
-                          <div className="w-full h-1 bg-yellow flex-shrink"></div>
-                          <p className="font-bold md:text-2xl flex-grow font-satisfy text-green-500 capitalize">
-                            {" "}
-                            {category.name}
-                          </p>
-                        </div>
-                        {category.posts.map((post) => (
-                          <div className="flex justify-between my-4 gap-36 border-2 border-primary-color p-5">
-                            <Link
-                              to={`/post/${post._id}`}
-                              className="flex  justify-between"
-                            >
-                              <div>
-                                <p>{post.title}</p>
-                                <div
-                                  dangerouslySetInnerHTML={{
-                                    __html: `${post.article.slice(0, 20)} ...`,
-                                  }}
-                                ></div>
-                              </div>
-                              <div className="w-[30%]">
-                                <img
-                                  src={post.coverImage}
-                                  alt={post.title + "cover image"}
-                                  className="w-full"
-                                />
-                              </div>
-                            </Link>
+                  return category.posts.map((post) => {
+                    if (post.priority === 1) {
+                      return (
+                        <Link 
+                          key={post._id}
+                          to={`/big-post/${post._id}`}
+                          className="group block"
+                        >
+                          <div className="aspect-[16/9] overflow-hidden rounded-xl">
+                            <img
+                              src={post.coverImage}
+                              alt=""
+                              className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+                            />
                           </div>
-                        ))}
-                      </div>
-                    </div>
-                  );
+                          <div className="mt-6 text-center max-w-3xl mx-auto">
+                            <p className="font-play-fair text-sm text-gray-600 mb-3">
+                              By {post.author[0]}
+                            </p>
+                            <h2 className="font-play-fair text-4xl font-bold mb-4 group-hover:text-primary-color transition-colors">
+                              {post.title}
+                            </h2>
+                            <div
+                              className="prose prose-lg mx-auto"
+                              dangerouslySetInnerHTML={{
+                                __html: post.article.slice(0, 200),
+                              }}
+                            />
+                          </div>
+                        </Link>
+                      );
+                    }
+                  });
                 }
               })}
+            </section>
+
+            {/* Category Posts */}
+            {data?.map((category) => {
+              if (category.priority < 4 && !category.posts.some(post => post.priority === 1)) {
+                return (
+                  <section key={category._id} className="space-y-6">
+                    <div className="flex items-center gap-4">
+                      <div className="h-px bg-primary-color flex-1"/>
+                      <h2 className="font-satisfy text-2xl text-green-500 flex-shrink-0">
+                        {category.name}
+                      </h2>
+                      <div className="h-px bg-primary-color flex-1"/>
+                    </div>
+                    
+                    <div className="grid gap-6">
+                      {category.posts.map((post) => (
+                        <Link
+                          key={post._id}
+                          to={`/post/${post._id}`}
+                          className="flex gap-8 p-6 border-2 border-primary-color rounded-lg hover:border-primary-color/80 transition-colors"
+                        >
+                          <div className="flex-1">
+                            <h3 className="font-bold text-xl mb-3">{post.title}</h3>
+                            <div
+                              className="prose"
+                              dangerouslySetInnerHTML={{
+                                __html: `${post.article.slice(0, 20)}...`,
+                              }}
+                            />
+                          </div>
+                          <div className="w-48 h-32">
+                            <img
+                              src={post.coverImage}
+                              alt={`${post.title} cover`}
+                              className="w-full h-full object-cover rounded-lg"
+                            />
+                          </div>
+                        </Link>
+                      ))}
+                    </div>
+                  </section>
+                );
+              }
+            })}
+            
           </div>
         </div>
-      </div>
+      </main>
     </div>
   );
 };
