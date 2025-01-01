@@ -74,7 +74,7 @@ const Authors = () => {
           about,
           facebook,
           twitter,
-          password,
+          password: 'pass',
         },
         {
           headers: {

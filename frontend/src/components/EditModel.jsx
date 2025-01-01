@@ -2,8 +2,10 @@ import React from "react";
 
 const EditModel = ({ children }) => {
   return (
-    <div className="absolute left-[50%] translate-x-[-50%] w-full bg-secondary-color/60 top-0 bottom-0 ">
-      <div className="flex place-content-center my-[7rem]">{children}</div>
+    <div className="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center">
+      <div className="bg-white rounded-lg shadow-xl max-w-md w-full mx-4 p-1">
+        {children}
+      </div>
     </div>
   );
 };
