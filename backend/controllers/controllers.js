@@ -107,7 +107,7 @@ export const login = async (req, res) => {
     if (!user && !author) return res.status(403).json("username not correct!!");
     if (author) {
       const password = await bcrypt.compare(req.body.password, author.password);
-      if (!password) return res.json(403).status("password not correct");
+      if (!password) return res.status(403).json("password not correct");
       jwtToken = await authorJwt({ author });
       return res.status(200).json({ author, jwtToken });
     }
@@ -176,12 +176,12 @@ export const add_category = async (req, res) => {
 };
 export const edit_category = async (req, res) => {
   try {
-    const categories = await Category.findOneAndUpdate(
+    const category = await Category.findOneAndUpdate(
       { slug: req.params.category },
       req.body,
       { new: true }
     );
-    res.status(201).json(categories);
+    res.status(201).json(category);
   } catch (err) {
     res.status(403).json(err.message);
   }
@@ -191,7 +191,7 @@ export const get_category = async (req, res) => {
     const category = await Category.findOne({ slug: req.params.slug }).populate(
       {
         path: "posts",
-        options: { sort: { createdAt: -1 } }
+        options: { sort: { createdAt: -1 } },
       }
     );
     res.status(200).json(category);
@@ -203,7 +203,9 @@ export const get_category = async (req, res) => {
 export const delete_category = async (req, res) => {
   try {
     // const c = await Category.findOne({slug: req.params.category})
-    const category = await Category.findOneAndDelete({ slug: req.params.category });
+    const category = await Category.findOneAndDelete({
+      slug: req.params.category,
+    });
     res.status(200).json(category);
   } catch (err) {
     res.status(403).json(err.message);
@@ -363,6 +365,30 @@ export const get_post = async (req, res) => {
     res.status(200).json(post);
   } catch (err) {
     res.status(404).json(err.message);
+  }
+};
+
+export const set_heading_post = async (req, res) => {
+  try {
+    await Post.updateMany({heading: false})
+    const post = await Post.findOneAndUpdate(
+      { _id: req.params.post_id },
+      {heading:true},
+      { new: true }
+    );
+    const p = await Post.find()
+    res.status(200).json({post, p});
+  } catch (err) {
+    res.status(401).json(err.message);
+  }
+};
+
+export const get_top_post = async (req, res) => {
+  try {
+    const post = await Post.findOne({ heading: true });
+    res.status(200).json(post);
+  } catch (err) {
+    res.status(401).json(err.message);
   }
 };
 

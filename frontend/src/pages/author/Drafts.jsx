@@ -3,6 +3,7 @@ import { NavLink, useParams } from "react-router-dom";
 import useFetch from "../../hooks/useFetch";
 import { path } from "../../utils/path";
 import Header from "../../components/Header";
+import { FaEye } from "react-icons/fa";
 
 const Drafts = () => {
   const { id } = useParams();

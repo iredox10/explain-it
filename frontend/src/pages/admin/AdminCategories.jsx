@@ -80,6 +80,7 @@ const AdminCategories = () => {
       console.log(error);
     }
   };
+
   const showDeleteModel = async (slug) => {
     console.log(slug)
     try {
@@ -101,6 +102,7 @@ const AdminCategories = () => {
       console.log(error);
     }
   };
+
   const handleDelete = async (category) => {
     const token = JSON.parse(localStorage.getItem("jwtToken"));
     console.log(category)
@@ -123,9 +125,10 @@ const AdminCategories = () => {
   const handleEdit = async (e, category) => {
     e.preventDefault();
     const token = JSON.parse(localStorage.getItem("jwtToken"));
+    console.log(category)
     try {
       const res = await axios.patch(
-        `${path}/edit-category/${catogery}`,
+        `${path}/edit-category/${category}`,
         {
           name,
           about,
@@ -141,14 +144,14 @@ const AdminCategories = () => {
         setEditModel(false);
         await fetchCategories();
       }
-      console.log(res);
+      console.log(res.data);
     } catch (err) {
       console.log(err);
     }
   };
   return (
     <div className="">
-      <Header />
+      <Header title={'Categories'} subtitle={'list of Categories'}/>
 
       {categories && (
         <Card
@@ -216,7 +219,7 @@ const AdminCategories = () => {
               </div>
             ) : (
               <Form
-                onsubmit={(e) => handleEdit(e, categoryId)}
+                onsubmit={(e) => handleEdit(e, slug)}
                 title={name}
                 subtitle={`Edit ${name}`}
                 close={() => setEditModel(false)}

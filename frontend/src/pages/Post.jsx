@@ -1,26 +1,25 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import { Link, useParams } from "react-router-dom";
 import useFetch from "../hooks/useFetch";
 import { path } from "../utils/path";
 import DOMPurify from "dompurify";
 import { format } from "date-fns";
-import styled from "styled-components";
-// import quillStyle from "../quillOutput.module.css";
+import { throttle } from "lodash";
+
 const Post = () => {
   const { id } = useParams();
   const { data: post, error, loading } = useFetch(`${path}/get-post/${id}`);
   console.log(post);
-  const article = post && DOMPurify.sanitize(post.article);
+  const fetchArticle = post && DOMPurify.sanitize(post.article);
+  const article = useMemo(() => {
+    return post ? fetchArticle : null;
+  }, [post]);
   // console.log(post.article);
   const [showSmallHeader, setShowSmallHeader] = useState(false);
 
-  const handleScroll = () => {
-    if (window.scrollY > 300) {
-      setShowSmallHeader(true);
-    } else {
-      setShowSmallHeader(false);
-    }
-  };
+  const handleScroll = throttle(() => {
+    setShowSmallHeader(window.scrollY > 300);
+  }, 100);
 
   useEffect(() => {
     // Add scroll event listener
@@ -31,21 +30,6 @@ const Post = () => {
       window.removeEventListener("scroll", handleScroll);
     };
   }, []);
-
-  const StyledDiv = styled.div`
-  h2{
-    color: #1aa71a;
-    font-size: 1.8rem;
-  }
-    a {
-      text-decoration: green underline;
-      transition: .2s ease;
-    }
-    a:hover{
-      background: green;
-      color: white;
-    }
-  `;
 
   return (
     <div className="">
@@ -87,13 +71,23 @@ const Post = () => {
               />
             </div>
             <div className="my-5 md:w-3/4 md:text-lg ">
-              {article && (
-                <StyledDiv
-                  className="leading-8 text-justify"
+              {/* {article && (
+                <div
+                  className="leading-5 text-justify [&>p]:text-gray-700 [&>p]:mb-1 [&>p]:text-black"
                   dangerouslySetInnerHTML={{ __html: article }}
                 />
-              )}
+              )} */}
             </div>
+          </div>
+          <div className="mt-5  ">
+            {article && (
+              <div>
+                <div
+                  dangerouslySetInnerHTML={{ __html: article }}
+                  className="md:mr-72 text-lg "
+                ></div>
+              </div>
+            )}
           </div>
         </div>
       )}

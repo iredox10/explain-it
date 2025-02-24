@@ -32,7 +32,7 @@ function App() {
     // useUserStore.setState({ user: user });
   }, []);
   return (
-    <div className="bg-secondary-color h-full font-rubik">
+    <div className="bg-secondary-color min-h-screen font-rubik">
       <Router>
         <Routes>
           <Route path="/" element={<Home />} />
@@ -41,12 +41,12 @@ function App() {
 
           <Route path="/login" element={<Login />} />
           <Route path="/register" element={<Register />} />
-          <Route path="/admin" element={<Admin />} />
+          <Route path="/admin/:id" element={<Admin />} />
           <Route path="/admin/category/:id" element={<AdminCategory />} />
           <Route path="/admin/categories" element={<AdminCategories />} />
           <Route path="/admin/authors" element={<Authors />} />
           <Route path="/admin/author/:id" element={<Author />} />
-          <Route path="/admin/drafts" element={<AdminDrafts />} />
+          <Route path="/admin/drafts/:id" element={<AdminDrafts />} />
 
           <Route path="/author/:id" element={<Author />} />
 
@@ -62,7 +62,7 @@ function App() {
 
           <Route path="author-drafts/:id" element={<Drafts />} />
 
-          <Route path="/:categoryId" element={<CategoryPage />} />
+          <Route path="/:categoryName" element={<CategoryPage />} />
 
           <Route path="*" element={<NotFoud />} />
         </Routes>

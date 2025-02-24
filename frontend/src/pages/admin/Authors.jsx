@@ -56,9 +56,20 @@ const Authors = () => {
     }
   }, [author]);
 
+  const closeEditModel = () => {
+    setEditModel(false);
+    setFullname("");
+    setUsername("");
+    setAbout("");
+    setTwitter("");
+    setFacebook("");
+    setPosition("");
+  };
+
   const handleSubmit = async (e) => {
+    console.log("hello");
     e.preventDefault();
-    if (!fullname || !username || !about || !password) {
+    if (!fullname || !username || !about) {
       setError("all fields can't be empty");
       return;
     }
@@ -74,7 +85,7 @@ const Authors = () => {
           about,
           facebook,
           twitter,
-          password: 'pass',
+          password: "pass",
         },
         {
           headers: {
@@ -96,12 +107,13 @@ const Authors = () => {
 
   const handleEditAuthor = async (e) => {
     e.preventDefault();
-    if (!fullname || !username || !about || !password) {
+    if (!fullname || !username || !about ) {
       setError("all fields can't be empty");
       return;
     }
     const token = JSON.parse(localStorage.getItem("jwtToken"));
     const user = JSON.parse(localStorage.getItem("user"));
+
     try {
       const res = await axios.patch(
         `${path}/edit-author/${author.author._id}`,
@@ -164,12 +176,24 @@ const Authors = () => {
           <table className="min-w-full bg-white rounded-lg overflow-hidden shadow-md">
             <thead className="bg-gray-50">
               <tr>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Name</th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Username</th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">About</th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Position</th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Social Media</th>
-                <th className="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">Actions</th>
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                  Name
+                </th>
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                  Username
+                </th>
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                  About
+                </th>
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                  Position
+                </th>
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                  Social Media
+                </th>
+                <th className="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">
+                  Actions
+                </th>
               </tr>
             </thead>
             <tbody className="divide-y divide-gray-200">
@@ -177,26 +201,44 @@ const Authors = () => {
                 authors.activeAuthors.map((author) => (
                   <tr key={author._id} className="hover:bg-gray-50">
                     <td className="px-6 py-4 whitespace-nowrap">
-                      <div className="text-sm font-medium text-gray-900">{author.fullname}</div>
+                      <div className="text-sm font-medium text-gray-900">
+                        {author.fullname}
+                      </div>
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap">
-                      <div className="text-sm text-gray-500">{author.username}</div>
+                      <div className="text-sm text-gray-500">
+                        {author.username}
+                      </div>
                     </td>
                     <td className="px-6 py-4">
-                      <div className="text-sm text-gray-500 max-w-xs truncate">{author.about}</div>
+                      <div className="text-sm text-gray-500 max-w-xs truncate">
+                        {author.about}
+                      </div>
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap">
-                      <div className="text-sm text-gray-500">{author.position}</div>
+                      <div className="text-sm text-gray-500">
+                        {author.position}
+                      </div>
                     </td>
                     <td className="px-6 py-4">
                       <div className="flex gap-2">
                         {author.facebook && (
-                          <a href={author.facebook} target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:text-blue-800">
+                          <a
+                            href={author.facebook}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="text-blue-600 hover:text-blue-800"
+                          >
                             Facebook
                           </a>
                         )}
                         {author.twitter && (
-                          <a href={author.twitter} target="_blank" rel="noopener noreferrer" className="text-blue-400 hover:text-blue-600">
+                          <a
+                            href={author.twitter}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="text-blue-400 hover:text-blue-600"
+                          >
                             Twitter
                           </a>
                         )}
@@ -212,14 +254,21 @@ const Authors = () => {
                           <FaEye className="h-5 w-5" />
                         </Link>
                         <button
-                          onClick={() => findAuthorAndShowModel(author._id, setEditModel)}
+                          onClick={() =>
+                            findAuthorAndShowModel(author._id, setEditModel)
+                          }
                           className="text-green-600 hover:text-green-800 transition-colors"
                           title="Edit"
                         >
                           <FaEdit className="h-5 w-5" />
                         </button>
                         <button
-                          onClick={() => findAuthorAndShowModel(author._id, setShowDeleteModel)}
+                          onClick={() =>
+                            findAuthorAndShowModel(
+                              author._id,
+                              setShowDeleteModel
+                            )
+                          }
                           className="text-red-600 hover:text-red-800 transition-colors"
                           title="Delete"
                         >
@@ -231,7 +280,10 @@ const Authors = () => {
                 ))
               ) : (
                 <tr>
-                  <td colSpan="6" className="px-6 py-4 text-center text-sm text-gray-500">
+                  <td
+                    colSpan="6"
+                    className="px-6 py-4 text-center text-sm text-gray-500"
+                  >
                     No authors yet
                   </td>
                 </tr>
@@ -295,13 +347,6 @@ const Authors = () => {
                   name={"position"}
                   onchange={(e) => setPosition(e.target.value)}
                 />
-                <FormInput
-                  type={"password"}
-                  label={"password"}
-                  labelFor={"password"}
-                  name={"password"}
-                  onchange={(e) => setPassword(e.target.value)}
-                />
               </div>
               <div></div>
               <FormBtn text={"submit"} />
@@ -322,7 +367,7 @@ const Authors = () => {
               onsubmit={handleEditAuthor}
               title={"Edit"}
               subtitle={`${author.author.username}`}
-              close={() => setEditModel(false)}
+              close={closeEditModel}
             >
               {error && error}
               <FormInput

@@ -15,8 +15,9 @@ const Login = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setErr(null);
     if (!username || !password) {
-      setErr("Fields can't be empty");
+      setErr("All fields are required");
       return;
     }
     try {
@@ -27,7 +28,7 @@ const Login = () => {
         if (res.data.user && res.data.user.admin) {
           localStorage.setItem("user", JSON.stringify(res.data.user));
           localStorage.setItem("jwtToken", JSON.stringify(res.data.jwtToken));
-          navigate("/admin");
+          navigate(`/admin/${res.data.user._id}`);
         }
         if (res.data.author.isAuthor) {
           localStorage.setItem("user", JSON.stringify(res.data.author));
@@ -36,8 +37,14 @@ const Login = () => {
           navigate(`/author-dashboard/${res.data.author._id}`);
         }
       }
-    } catch (err) {
-      setErr(err.response.data);
+    } catch (error) {
+      if (error.response) {
+        setErr(error.response.data || "Login failed. Please try again.");
+      } else if (error.request) {
+        setErr("Network error. Please check your connection.");
+      } else {
+        setErr("Something went wrong. Please try again later.");
+      }
     }
   };
 
@@ -54,8 +61,25 @@ const Login = () => {
         </div>
         <form onSubmit={handleSubmit} className="mt-8 space-y-6">
           {err && (
-            <div className="bg-red-50 border-l-4 border-red-400 p-4">
-              <p className="text-red-700">{err}</p>
+            <div className="rounded-md bg-red-50 p-4 border border-red-200 animate-fadeIn">
+              <div className="flex">
+                <div className="flex-shrink-0">
+                  <svg
+                    className="h-5 w-5 text-red-400"
+                    viewBox="0 0 20 20"
+                    fill="currentColor"
+                  >
+                    <path
+                      fillRule="evenodd"
+                      d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z"
+                      clipRule="evenodd"
+                    />
+                  </svg>
+                </div>
+                <div className="ml-3">
+                  <p className="text-sm font-medium text-red-800">{err}</p>
+                </div>
+              </div>
             </div>
           )}
           <div className="space-y-4">
@@ -69,7 +93,7 @@ const Login = () => {
             />
             <FormInput
               label="Password"
-              labelFor="password" 
+              labelFor="password"
               type="password"
               name="password"
               onchange={(e) => setPassword(e.target.value)}
@@ -77,7 +101,7 @@ const Login = () => {
             />
           </div>
           <div>
-            <FormBtn 
+            <FormBtn
               text="Sign in"
               className="group relative w-full flex justify-center py-2 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-primary-color hover:bg-primary-color/90 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary-color"
             />

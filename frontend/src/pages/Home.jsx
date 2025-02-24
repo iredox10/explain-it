@@ -6,7 +6,8 @@ import styled from "styled-components";
 
 const Home = () => {
   const { data, loading, error } = useFetch(`${path}/get-posts`);
-  console.log(data);
+  const { data:topPost, loading:tLoading, error:tErr } = useFetch(`${path}/get-top-post`);
+  console.log(topPost);
 
   return (
     <div className="min-h-screen">
@@ -55,6 +56,11 @@ const Home = () => {
 
           {/* Main Content */}
           <div className="lg:col-span-9 space-y-12">
+           <section>
+            {topPost && <div>
+           hello 
+            </div>} 
+            </section> 
             
             {/* Featured Post */}
             <section>
@@ -92,6 +98,30 @@ const Home = () => {
                         </Link>
                       );
                     }
+                    return (
+                      <Link
+                        key={post._id}
+                        to={`/post/${post._id}`}
+                        className="flex gap-8 p-6 border-2 border-primary-color rounded-lg hover:border-primary-color/80 transition-colors mt-8"
+                      >
+                        <div className="flex-1">
+                          <h3 className="font-bold text-xl mb-3">{post.title}</h3>
+                          <div
+                            className="prose"
+                            dangerouslySetInnerHTML={{
+                              __html: `${post.article.slice(0, 20)}...`,
+                            }}
+                          />
+                        </div>
+                        <div className="w-48 h-32">
+                          <img
+                            src={post.coverImage}
+                            alt={`${post.title} cover`}
+                            className="w-full h-full object-cover rounded-lg"
+                          />
+                        </div>
+                      </Link>
+                    );
                   });
                 }
               })}

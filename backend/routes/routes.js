@@ -57,9 +57,13 @@ route.get("/get-posts", controller.get_posts);
 
 route.get("/get-post/:id", controller.get_post);
 
+route.get("/get-top-post", controller.get_post);
+
 route.patch("/edit-post/:id", verifyAuthorOrAdmin, controller.edit_post);
 
-route.delete("/delete-post/:id/:categoryId", verifyAdmin, controller.delete_post);
+route.patch("/set-post-as-heading/:post_id", controller.set_heading_post);
+
+route.delete("/delete-post/:id/:categoryId", controller.delete_post);
 
 route.post("/add-draft/:id",verifyAuthorOrAdmin,  controller.draft);
 

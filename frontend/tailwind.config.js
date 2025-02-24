@@ -17,6 +17,15 @@ export default {
         'primary-color': '#04991C',
         'secondary-color': '#E2FFDD',
         'yellow': '#FFE70C'
+      },
+      keyFrames:{
+        'fadeIn':{
+          '0%':{opacity:'0'},
+          '100%':{opacity:'1'}
+        }
+      },
+      animation:{
+        'fadeIn':'fadeIn 0.3s ease-in-out'
       }
     },
   },

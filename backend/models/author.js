@@ -9,7 +9,7 @@ const author = await mongoose.Schema(
     username: {
       type: String,
       required: true,
-      unique:true
+      unique: true,
     },
     about: {
       type: String,
@@ -18,9 +18,9 @@ const author = await mongoose.Schema(
     postion: {
       type: String,
     },
-    isAuthor:{
+    isAuthor: {
       type: String,
-      default: true
+      default: true,
     },
     posts: [
       {
@@ -34,11 +34,11 @@ const author = await mongoose.Schema(
     facebook: String,
     twitter: String,
     whatsapp: String,
-    password: String,
+    password: { type: String, required: true },
     active: {
       type: Boolean,
-      default: true
-    }
+      default: true,
+    },
   },
   { timestamps: true }
 );

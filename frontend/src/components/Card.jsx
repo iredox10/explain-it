@@ -4,7 +4,8 @@ import { Link } from 'react-router-dom'
 
 const Card = ({categories,model,deleteModel}) => {
   return (
-    <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+    <div className="max-w-7xl my-5 mx-auto px-4 sm:px-6 lg:px-8 py-8">
+
       <div className="overflow-x-auto">
         <table className="min-w-full bg-white rounded-lg overflow-hidden shadow-md">
           <thead className="bg-gray-50">

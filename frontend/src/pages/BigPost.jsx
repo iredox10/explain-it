@@ -3,12 +3,14 @@ import { useParams } from "react-router-dom";
 import useFetch from "../hooks/useFetch";
 import { path } from "../utils/path";
 import DOMPurify from "dompurify";
+
 const BigPost = () => {
   const { id } = useParams();
   const { data: post, error, loading } = useFetch(`${path}/get-post/${id}`);
   console.log(post);
   const article = post && DOMPurify.sanitize(post.article);
   console.log(article);
+
   return (
     <div className="flex flex-col content-between gap-10">
       {loading && <p>Loading...</p>}

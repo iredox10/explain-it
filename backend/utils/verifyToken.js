@@ -16,9 +16,9 @@ export const verifyToken = (req,res,next)=>{
 
 export const verifyAdmin = (req,res,next )=> {
     const token = req.headers['authorization'] && req.headers['authorization'].split(' ')[1]
+    console.log(req.headers['authorization'])
     if(!token){
         return res.status(403).json('token is required')
-
     }
 
     jwt.verify(token, process.env.SECRET_KEY, (err, decode)=>{
