@@ -325,13 +325,6 @@ export const author_create_post = async (req, res) => {
 
 export const get_posts = async (req, res) => {
   try {
-    const categories = await Category.aggregate([
-      {
-        $group: {
-          _id: "$priority",
-        },
-      },
-    ]);
     const categoriesWithPosts = await Category.aggregate([
       {
         $lookup: {

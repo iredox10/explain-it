@@ -57,7 +57,7 @@ route.get("/get-posts", controller.get_posts);
 
 route.get("/get-post/:id", controller.get_post);
 
-route.get("/get-top-post", controller.get_post);
+route.get("/get-top-post", controller.get_top_post);
 
 route.patch("/edit-post/:id", verifyAuthorOrAdmin, controller.edit_post);
 

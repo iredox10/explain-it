@@ -66,21 +66,14 @@ const AdminCategory = () => {
   const handleSetHeading = async (postId) => {
     const token = JSON.parse(localStorage.getItem("jwtToken"));
     console.log(token);
-    console.log(postId)
+    console.log(postId);
     try {
-
-      const res = await axios.patch(
-        `${path}/set-post-as-heading/${postId}`,
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        })
-      // const res = await axios.patch(`${path}/set-post-as-heading/${postId}`, {
-      //   headers: {
-      //     Authorization: `Bearer ${token}`,
-      //   },
-      // });
+      const res = await axios.patch(`${path}/set-post-as-heading/${postId}`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+      fetchCategory();
       console.log(res.data);
     } catch (error) {
       console.log(error);
@@ -118,6 +111,9 @@ const AdminCategory = () => {
                     Author
                   </th>
                   <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                    Priority
+                  </th>
+                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                     Status
                   </th>
                   <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
@@ -144,6 +140,11 @@ const AdminCategory = () => {
                         <div className="text-sm text-gray-500">
                           {post.author || "Anonymous"}
                         </div>
+                      </td>
+                      <td className="px-6 py-4 whitespace-nowrap">
+                        <span className="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-green-100 text-green-800">
+                          {post.priority}
+                        </span>
                       </td>
                       <td className="px-6 py-4 whitespace-nowrap">
                         <span className="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-green-100 text-green-800">
