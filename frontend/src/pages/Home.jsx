@@ -15,10 +15,13 @@ const Home = () => {
 
   return (
     <div className="min-h-screen">
+
       <header className="bg-primary-color py-12 px-6 text-center">
-        <h1 className="font-saira text-4xl text-white font-bold">
-          Latest Articles
-        </h1>
+        <h1 className="font-saira text-4xl text-white font-bold">Explained</h1>
+        <div>
+          <Link className="border-r px-1">Home</Link>
+          <Link className="px-1">Category</Link>
+        </div>
       </header>
 
       <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
@@ -104,8 +107,8 @@ const Home = () => {
             {data?.map((category) => {
               if (
                 category.priority <= 4 &&
-                category.posts.length > 0 &&
-                category.posts.every((post) => post.priority > 3)
+                category.posts.length > 0 
+                // category.posts.every((post) => post.priority > 3)
               ) {
                 return (
                   <section key={category._id} className="space-y-6">
@@ -117,7 +120,7 @@ const Home = () => {
                       <div className="h-px bg-primary-color flex-1" />
                     </div>
                     {category.posts.map((post) => {
-                      if (!post.heading && post.priority > 4) {
+                      if (!post.heading && post.priority <5) {
                         return (
                           <div>
                             <Link
@@ -132,7 +135,7 @@ const Home = () => {
                                 <div
                                   className="prose"
                                   dangerouslySetInnerHTML={{
-                                    __html: `${post.article.slice(0, 20)}...`,
+                                    __html: `${post.article.slice(0, 200)}...`,
                                   }}
                                 />
                               </div>

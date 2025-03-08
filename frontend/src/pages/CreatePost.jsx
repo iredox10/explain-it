@@ -228,7 +228,7 @@ const CreatePost = () => {
                 name="subtitle"
                 id="subtitle"
                 placeholder="subtitle"
-                className="w-full px-10 font-bold text-2xl max-h-16 bg-secondary-color"
+                className="w-full px-10 font-bold max-h-16 bg-secondary-color "
                 onChange={(e) => setSubTitle(e.target.value)}
               ></textarea>
               <input
