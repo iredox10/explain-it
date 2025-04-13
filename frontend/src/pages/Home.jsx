@@ -1,8 +1,6 @@
-import React from "react";
 import useFetch from "../hooks/useFetch";
 import { path } from "../utils/path";
 import { Link } from "react-router-dom";
-import styled from "styled-components";
 
 const Home = () => {
   const { data, loading, error } = useFetch(`${path}/get-posts`);
@@ -37,7 +35,7 @@ const Home = () => {
                         return (
                           <Link
                             key={post._id}
-                            to={`/post/${post._id}`}
+                            to={`/post/${post.slug}`}
                             className="block p-4 border-2 border-primary-color hover:border-primary-color/80 transition-colors mb-6 rounded-lg"
                           >
                             <p className="text-sm font-medium text-primary-color uppercase tracking-wide mb-2">
@@ -72,7 +70,7 @@ const Home = () => {
                 <div>
                   <Link
                     key={topPost._id}
-                    to={`/big-post/${topPost._id}`}
+                    to={`/big-post/${topPost.slug}`}
                     className="group block"
                   >
                     <div className="aspect-[16/9] overflow-hidden rounded-xl">
@@ -122,10 +120,9 @@ const Home = () => {
                     {category.posts.map((post) => {
                       if (!post.heading && post.priority <5) {
                         return (
-                          <div>
+                          <div key={post._id}>
                             <Link
-                              key={post._id}
-                              to={`/post/${post._id}`}
+                              to={`/post/${post.slug}`}
                               className="flex gap-8 p-6 border-2 border-primary-color rounded-lg hover:border-primary-color/80 transition-colors"
                             >
                               <div className="flex-1">

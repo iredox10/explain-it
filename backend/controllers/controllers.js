@@ -357,7 +357,7 @@ export const get_posts = async (req, res) => {
 
 export const get_post = async (req, res) => {
   try {
-    const post = await Post.findById(req.params.id);
+    const post = await Post.findOne({slug: req.params.post});
     res.status(200).json(post);
   } catch (err) {
     res.status(404).json(err.message);
