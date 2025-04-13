@@ -1,5 +1,5 @@
 import React from "react";
-import { useParams } from "react-router-dom";
+import { useParams, Link } from "react-router-dom";
 import useFetch from "../hooks/useFetch";
 import { path } from "../utils/path";
 import DOMPurify from "dompurify";
@@ -37,7 +37,7 @@ const BigPost = () => {
           <div>
             {post && (
               <div className='capitalize'>
-                <p className="text-sm font-medium ">{post.category}</p>
+                <Link to={`/${post.category}`} className="text-sm font-medium ">{post.category}</Link>
                 <h1 className="md:text-7xl text-4xl font-bold capitalize md:my-4">
                   {post.title}
                 </h1>
@@ -65,7 +65,7 @@ const BigPost = () => {
           </div>
         )}
       </div>
-      <footer className="bg-primary-color p-4">
+      <footer className="bg-primary-color px-16 py-4">
         <div>Logo</div>
         <div>Links</div>
       </footer>

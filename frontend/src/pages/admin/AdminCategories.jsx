@@ -21,6 +21,8 @@ const AdminCategories = () => {
   const [loading, setLoading] = useState(false);
   const [deleteModel, setDeleteModel] = useState(false);
 
+  const [searchTerm, setSearchTerm] = useState('')
+
   const fetchCategories = async () => {
     try {
       const res = await axios(`${path}/get-categories`);
@@ -34,6 +36,11 @@ const AdminCategories = () => {
   useEffect(() => {
     fetchCategories();
   }, []);
+
+  const filteredCategory = categories?.filter(category => category.name.toLowerCase().includes(searchTerm)
+  )
+
+  console.log(filteredCategory)
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -151,15 +158,15 @@ const AdminCategories = () => {
   };
   return (
     <div className="">
-      <Header title={'Categories'} subtitle={'list of Categories'}/>
+      <Header title={'Categories'} subtitle={'list of Categories'} searchOnChange={(e) => setSearchTerm(e.target.value)}/>
 
-      {categories && (
+      {filteredCategory?.length > 0? (
         <Card
-          categories={categories}
+          categories={filteredCategory}
           model={showEditModel}
           deleteModel={showDeleteModel}
         ></Card>
-      )}
+      ): 'no post'}
 
       {model && (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center">

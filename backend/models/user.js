@@ -7,6 +7,11 @@ const user = await mongoose.Schema(
       required: true,
       unique: true,
     },
+    email:{
+      type: String,
+      required: true,
+      unique: true,
+    },
     admin: {
       type: Boolean,
       default: false,
@@ -16,6 +21,8 @@ const user = await mongoose.Schema(
       required: true,
     },
     drafts: [{ type: mongoose.Types.ObjectId, ref: "draft" }],
+    resetToken: String,
+    resetTokenExp: Date,
   },
   { timestamps: true }
 );

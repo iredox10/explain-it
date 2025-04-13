@@ -12,7 +12,7 @@ const AdminCategory = () => {
   const [category, setCategory] = useState();
   const [model, setModel] = useState(false);
   const [post, setPost] = useState();
-  const [search, setSearch] = useState();
+  const [searchTerm, setSearchTerm] = useState('');
   const { id } = useParams();
 
   const fetchCategory = async () => {
@@ -28,6 +28,14 @@ const AdminCategory = () => {
   useEffect(() => {
     fetchCategory();
   }, []);
+
+  const filteredPosts = (category?.posts.filter(post => post.title.toLowerCase().includes(searchTerm))
+  )
+
+  console.log(filteredPosts)
+
+
+
 
   const handleShowModel = async (id) => {
     try {
@@ -82,7 +90,7 @@ const AdminCategory = () => {
   return (
     <div className="min-h-screen bg-gray-100">
       <Header
-        searchOnChange={(e) => setSearch(e.target.value)}
+        searchOnChange={(e) => setSearchTerm(e.target.value)}
         title={category?.name}
         subtitle={`Manage posts in ${category?.name}`}
       />
@@ -128,8 +136,8 @@ const AdminCategory = () => {
                 </tr>
               </thead>
               <tbody className="divide-y divide-gray-200">
-                {category ? (
-                  category.posts.map((post) => (
+                {filteredPosts?.length > 0 ? (
+                  filteredPosts.map((post) => (
                     <tr key={post._id} className="hover:bg-gray-50">
                       <td className="px-6 py-4 whitespace-nowrap">
                         <div className="text-sm font-medium text-gray-900">

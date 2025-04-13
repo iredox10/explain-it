@@ -4,7 +4,7 @@ import FormInput from "../components/FormInput";
 import FormBtn from "../components/FormBtn";
 import { path } from "../utils/path";
 import { useUserStore } from "../utils/store"; // Ensure you import the correct store
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 const Login = () => {
   const [username, setUsername] = useState("");
@@ -107,6 +107,7 @@ const Login = () => {
             />
           </div>
         </form>
+        <p>forget password? <Link to='/'>Reset Password</Link></p>
       </div>
     </div>
   );

@@ -77,4 +77,7 @@ route.patch('/update-draft/:id', verifyAuthorOrAdmin,controller.update_draft)
 
 route.delete("/delete-draft/:id",  verifyAuthorOrAdmin,controller.delete_draft);
 
+
+route.post('/reset-password', controller.resetPassword)
+
 export default route;

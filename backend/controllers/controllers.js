@@ -7,6 +7,8 @@ import Category from "../models/category.js";
 import Draft from "../models/draft.js";
 import { cloudinaryConfig } from "../config/cloudinary.js";
 import cloudinary from "cloudinary";
+import { sendPasswordResetEmail } from "../lib/nodemailer.js";
+import { transporter } from "../lib/nodemailer.js";
 
 const signJwt = async ({ user }) => {
   const token = await jwt.sign(
@@ -80,12 +82,13 @@ export const edit_author = async (req, res) => {
 };
 
 export const register_user = async (req, res) => {
-  const { username, admin, password } = req.body;
+  const { username, email, admin, password } = req.body;
   try {
     const hashedPassword = await bcrypt.hash(password, 10);
     const user = await User.create({
       username,
       admin,
+      email,
       password: hashedPassword,
     });
     const jwtToken = await signJwt({ user });
@@ -363,14 +366,14 @@ export const get_post = async (req, res) => {
 
 export const set_heading_post = async (req, res) => {
   try {
-    await Post.updateMany({heading: false})
+    await Post.updateMany({ heading: false });
     const post = await Post.findOneAndUpdate(
       { _id: req.params.post_id },
-      {heading:true},
+      { heading: true },
       { new: true }
     );
-    const p = await Post.find()
-    res.status(200).json({post, p});
+    const p = await Post.find();
+    res.status(200).json({ post, p });
   } catch (err) {
     res.status(401).json(err.message);
   }
@@ -604,3 +607,41 @@ export const delete_draft = async (req, res) => {
     res.status(404).json(err.message);
   }
 };
+
+export const resetPassword = async (req, res) => {
+  try {
+    const { email } = req.body;
+    const user = await User.findOne({ email });
+
+    if (!user) {
+      return res.status(400).json({ message: "User not found" });
+    }
+
+    const resetToken = jwt.sign(
+      { email }, 
+      process.env.SECRET_KEY, 
+      { expiresIn: "1h" }
+    );
+    
+    user.resetToken = resetToken;
+    user.resetTokenExp = Date.now() + 3600000; // 1 hour
+    await user.save();
+
+    const resetUrl = `http://localhost:3000/reset-password/${resetToken}`;
+
+    await transporter.sendMail({
+      from: process.env.EMAIL,
+      to: email,
+      subject: "Password Reset",
+      html: `<p>Click <a href="${resetUrl}">here</a> to reset your password.</p>`,
+    });
+
+    res.json({ message: "Password reset link sent!" });
+  } catch (error) {
+    console.error('Reset password error:', error);
+    res.status(500).json({ message: "Error sending reset email" });
+  }
+};
+
+
+

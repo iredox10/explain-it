@@ -16,7 +16,7 @@ const CategoryHeader = ({title, about}) => {
           </nav>
         </div>
 
-        <div className="mt-12 text-center text-white">
+        <div className="mt-12 text-left text-white">
           <h1 className="text-4xl md:text-6xl font-bold tracking-tight capitalize mb-4">{title}</h1>
           <p className="text-lg md:text-xl text-gray-100 capitalize">{about}</p>
         </div>
