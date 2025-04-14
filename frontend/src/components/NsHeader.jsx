@@ -1,4 +1,3 @@
-
 import React from "react";
 import { Link } from "react-router-dom";
 
@@ -17,7 +16,7 @@ const NsHeader = ({headerText}) => {
             <Link to="/categories" className="text-white hover:text-gray-200 transition-colors px-3 py-2 rounded-md text-sm font-medium">Categories</Link>
             <Link to="/about" className="text-white hover:text-gray-200 transition-colors px-3 py-2 rounded-md text-sm font-medium">About</Link>
           </nav>
-        </div>
+      </div>
 
         <div className="mt-8 pb-6">
           <h1 className="text-4xl md:text-5xl font-bold text-white capitalize tracking-tight">

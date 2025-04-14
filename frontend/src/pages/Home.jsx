@@ -13,14 +13,23 @@ const Home = () => {
 
   return (
     <div className="min-h-screen">
-
-      <header className="bg-primary-color py-12 px-6 text-center">
+      <div className="bg-primary-color p-16 relative">
+        <h1 className="absolute -bottom-5 font-saira text-white md:text-8xl ">
+          Explained
+        </h1>
+        <div className="flex items-center text-white gap-2 capitalize justify-end">
+          <Link>Home</Link>
+          <Link>about</Link>
+          <Link>Contact</Link>
+        </div>
+      </div>
+      {/* <header className="bg-primary-color py-12 px-6 text-center">
         <h1 className="font-saira text-4xl text-white font-bold">Explained</h1>
         <div>
           <Link className="border-r px-1">Home</Link>
           <Link className="px-1">Category</Link>
         </div>
-      </header>
+      </header> */}
 
       <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
@@ -105,20 +114,20 @@ const Home = () => {
             {data?.map((category) => {
               if (
                 category.priority <= 4 &&
-                category.posts.length > 0 
+                category.posts.length > 0
                 // category.posts.every((post) => post.priority > 3)
               ) {
                 return (
                   <section key={category._id} className="space-y-6">
                     <div className="flex items-center gap-4">
                       <div className="h-px bg-primary-color flex-1" />
-                      <h2 className="font-satisfy text-2xl text-green-500 flex-shrink-0">
-                        {category.name}
+                      <h2 className="font-rubik font-bold capitalize text-2xl text-green-500 flex-shrink-0">
+                        {category.name}  
                       </h2>
                       <div className="h-px bg-primary-color flex-1" />
                     </div>
                     {category.posts.map((post) => {
-                      if (!post.heading && post.priority <5) {
+                      if (!post.heading && post.priority < 5) {
                         return (
                           <div key={post._id}>
                             <Link

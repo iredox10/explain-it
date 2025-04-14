@@ -65,10 +65,7 @@ const BigPost = () => {
           </div>
         )}
       </div>
-      <footer className="bg-primary-color px-16 py-4">
-        <div>Logo</div>
-        <div>Links</div>
-      </footer>
+      
     </div>
   );
 };

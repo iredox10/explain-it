@@ -21,6 +21,7 @@ import BigPost from "./pages/BigPost";
 import Dashboard from "./pages/author/Dashboard";
 import Drafts from "./pages/author/Drafts";
 import CategoryPage from "./pages/CategoryPage";
+import Footer from "./components/Footer";
 
 function App() {
   const user = useUserStore((state) => state.user);
@@ -67,6 +68,7 @@ function App() {
           <Route path="*" element={<NotFoud />} />
         </Routes>
       </Router>
+      <Footer /> 
     </div>
   );
 }
